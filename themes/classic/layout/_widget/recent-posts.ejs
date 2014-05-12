@@ -1,0 +1,12 @@
+<% if (site.posts.length){ %>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    <% site.posts.sort('date', -1).limit(theme.recent_posts || 5).each(function(post){ %>
+    <li class="post">
+      <a href="<%- config.root %><%- post.path %>"><%= post.title || '(no title)' %></a>
+    </li>
+    <% }) %>
+  </ul>
+</section>
+<% } %>

@@ -1,0 +1,16 @@
+<div class="blog-index">
+<% page.posts.each(function(post){ %>
+  <article role="article">
+    <%- partial('_partial/article', {index: true, post: post}) %>
+  </article>
+<% }) %>
+<% if (page.total > 1){ %>
+  <div class="pagination">
+    <%- paginator({
+      prev_text: '&laquo; Prev',
+      next_text: 'Next &raquo;'
+    }) %>
+  </div>
+<% } %>
+</div>
+<%- partial('_partial/sidebar') %>

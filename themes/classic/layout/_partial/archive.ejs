@@ -1,0 +1,14 @@
+<div id="blog-archives">
+<% var last; %>
+<% page.posts.each(function(post, i){ %>
+  <% var year = post.date.year(); %>
+  <% if (last != year){ %>
+    <h2><%= year %></h2>
+    <% last = year; %>
+  <% } %>
+  <article>
+    <%- partial('archive-post', { post: post }) %>
+  </article>
+<% }) %>
+</div>
+

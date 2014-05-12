@@ -1,0 +1,25 @@
+  <header>
+    <h1 class="entry-title">
+      <% if (index) { %>
+        <a class="" href="<%- config.root %><%- post.path %>"><%= post.title %></a>
+      <% } else { %>
+        <%= post.title %>
+      <% } %>
+    </h1>
+    <p class="meta">
+      <%- partial('post/date', {date_format: null}) %>
+    </p>
+  </header>
+
+  <div class="entry-content">
+    <% if (post.excerpt && index){ %>
+      <%- post.excerpt %>
+    <% } else { %>
+      <%- post.content %>
+    <% } %>
+  </div>
+  <% if (post.excerpt && index && theme.excerpt_link){ %>
+    <footer>
+      <a rel="full-article" href="<%- config.root %><%- post.path %>#more"><%- theme.excerpt_link %></a>
+    </footer>
+  <% } %>

@@ -1,0 +1,13 @@
+<%- partial('_partial/head') %>
+<body <% if (theme.body_id) { %> id="<% theme.body_id %>" <% } %> <% if (theme.sidebar == false){ %> class="no-sidebar" <% } %> <% if (theme.sidebar == 'collapse') { %> class="collapse-sidebar sidebar-footer" <% } %>>
+<header role="banner"><%- partial('_partial/header') %></header>
+<nav role="navigation"><%- partial('_partial/navigation') %></nav>
+<div id="main">
+  <div id="content">
+    <%- body %>
+  </div>
+</div>
+<%- partial('_partial/footer') %>
+<%- partial('_partial/after-footer') %>
+</body>
+</html>

@@ -1,0 +1,338 @@
+----
+layout: false
+----
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Versioning Assets</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+	            <section>
+                    <section>
+	                    <h1>Versioning Static Assets With Grunt</h1>
+                    </section>
+
+                    <section>
+                        <h2>Who am I ?</h2>
+                        <h3>Alexandrine Boissière</h3>
+                        <p>Senior Software Engineer at HootSuite</p>
+                    </section>
+	            </section>
+
+                <section>
+                    <h2>Static assets ?</h2>
+                    <img src="http://static.theasta.net/images/2013-05-22/icons_file_type.jpg">
+                </section>
+
+                <section>
+                    <h2>Why ?</h2>
+                    <p><img src="http://static.theasta.net/images/2013-05-22/high-performance-web-sites.jpg"></p>
+                    <h3>Rule #3: Add an expires header</h3>
+                </section>
+
+                <section>
+                    <h3>HTTP Validation Model</h3>
+                    <p><strong>HTTP Headers</strong></p>
+                    <ul>
+                        <li><code>Last-Modified / If-Modified-Since</code></li>
+                        <li><code>Etag / If-None-Match</code></li>
+                    </ul>
+                    <img src="http://static.theasta.net/images/2013-05-22/http_validation_model.png">
+                </section>
+
+                <section>
+                    <h3>HTTP Expiration Model</h3>
+                    <p><strong>HTTP Headers</strong></p>
+                    <ul>
+                        <li><code>Cache-Control: max-age=2592000</code></li>
+                        <li><code>Expires:Sat, 22 Jun 2013 05:00:00 GMT</code></li>
+                    </ul>
+                    <p style="color:green;padding-top:20px;">No request to the server for the next month !!</p>
+                </section>
+
+				<section>
+                    <h2>Cache-Busting Techniques</h2>
+                    <ul>
+                        <li><code>/js/base.js<span style="color:red;">?v=1.2.0</span></code> (BAD)</li>
+                        <li><code><span style="color:red;">/1.2.0</span>/js/base.js</code></li>
+                        <li><code>/js/base<span style="color:red;">.1.2.0</span>.js</code></li>
+                    </ul>
+				</section>
+
+                    <section>
+                        <h2>Old HootSuite</h2>
+                        <p><code><span style="color:red;">/12345</span>/js/base.js</code></p>
+                        <p><code><span style="color:red;">/12345</span>/css/homepage.css</code></p>
+                        <p><code><span style="color:red;">/12345</span>/images/bg.png</code></p>
+                        <p><span style="color:red;">12345</span> folder = <strong>release tag</strong></p>
+                    </section>
+
+                    <section>
+                        <h2>Versioning By Release Number</h2>
+                        <p style="margin-top:1em;color: red;">Continuous deployment + per-release assets versioning = bad match !!</p>
+                        <img src="http://static.theasta.net/images/2013-05-22/no_changes.gif"/>
+                    </section>
+
+                    <section>
+                        <h2>Version Static Assets on a per-file basis</h2>
+                        <img src="http://static.theasta.net/images/2013-05-22/per-file.png"/>
+                    </section>
+
+                <section>
+                    <h2>Problems to solve</h2>
+                    <ul>
+                        <li><strong>Deployment:</strong>
+                        <ul>
+                            <li>Automate renaming of assets files</li>
+                            <li>Process and upload only when necessary</li>
+                        </ul>
+                        </li>
+                        <li><strong>Codebase:</strong>
+                        <ul>
+                            <li>Retrieve the versioned filenames</li>
+                        </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section data-state="alert">
+                    <h2>SPOILER !!!</h2>
+                    <h4>Deployment Time for static assets:</h4>
+                    <h2 class="fragment">Old HootSuite: 11 min</h2>
+                    <h2 class="fragment">Now: 1 min</h2>
+                </section>
+
+                <section>
+                    <h2>Deployment</h2>
+                    <h3>Grunt</h3>
+                    <img src="http://static.theasta.net/images/2013-05-22/grunt.png">
+                    <p>A JavaScript task runner built on top of Node.js</p>
+                </section>
+
+                <section>
+                    <h2>Gruntfile.js</h2>
+<pre><code data-trim contenteditable>
+module.exports = function(grunt) {
+  grunt.initConfig({
+    uglify: { ... },
+    cssmin: { ... },
+    s3: { ... }
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-s3');
+  grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
+};
+</code></pre>
+<code>grunt &lt;taskName&gt;</code>
+                </section>
+
+                <section>
+                    <h2>Task Configuration - Files</h2>
+                    <img src="http://static.theasta.net/images/2013-05-22/grunt_files.gif"/>
+                </section>
+                <section>
+                    <h2>Step 1: Write a deployment script - js</h2>
+<pre><code data-trim contenteditable>
+grunt.initConfig({
+  uglify: {
+    home: {
+      files: {
+        'build/js/home.js': ['js/home.js', 'js/home_utils.js']
+      }
+    },
+    contact: {
+      files: {
+        'build/js/contact.js': ['js/contact_form.js']
+      }
+    }
+  }
+});
+</code></pre>
+<code>grunt uglify</code>
+<br/>
+<code>grunt uglify:home</code>
+                </section>
+
+                <section>
+                    <h2>Step 1: Write a deployment script - css</h2>
+<pre><code data-trim contenteditable>
+grunt.initConfig({
+  cssmin: {
+    main: {
+      files: {
+        'build/css/main.css': ['css/layout.css', 'css/buttons.css']
+      }
+    }
+  }
+});
+</code></pre>
+<code>grunt cssmin</code>
+                </section>
+
+                <section>
+                    <h2>Register a deployment task</h2>
+<pre><code data-trim contenteditable>
+grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
+</code></pre>
+<code>grunt deploy</code>
+                </section>
+
+                <section>
+                    <h2>Step 2 : Versioning files</h2>
+                    <ul>
+                        <li>Revving with a date
+                        <ul>
+                            <li>Use the last modification time</li>
+                        </ul>
+                        </li>
+                        <li>Revving with a md5 hash
+                        <ul>
+                            <li>Hash the file content</li>
+                        </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Declarative Syntax !!</h2>
+                    <img src="http://static.theasta.net/images/2013-05-22/grunt_files_question_mark.gif"/>
+                </section>
+
+                <section>
+                    <h2>Solution: An assets-versioning plugin</h2>
+                    <img src="http://static.theasta.net/images/2013-05-22/grunt_plugin.gif" />
+                </section>
+
+                <section>
+                    <h2>Example</h2>
+<pre><code data-trim contenteditable>
+assets_versioning: {
+    home: {
+      options: {
+        multitask: 'uglify'
+      }
+    }
+  }
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>options.skipExisting</h2>
+                    <p>Won't run the cloned task if ever the versioned destination file already exists.</p>
+                    <p><small>and plenty other options...</small></p>
+                </section>
+
+
+                <section>
+                    <h2>Codebase</h2>
+                    <h3>How to retrieve the versioned filename ?</h3>
+                    <p><code>/images/loader.gif</code> -&gt; <code>/images/loader.20130413004500.gif</code></p>
+                    <p>options.output: generates a json file with both original and versioned filenames.</p>
+                </section>
+
+                <section>
+                    <h2>But .. css ?</h2>
+                    <h4>Solution : Use a css preprocessor (less, sass)</h4>
+
+<pre><code data-trim contenteditable>
+// images.less
+@loader_gif: 'loader.gif';
+@buttons_btn-cta_png: 'buttons/btn-cta.png';
+</code></pre>
+
+<pre><code data-trim contenteditable>
+.btn-cta {
+    color: #384602;
+    background: #accd3d url("@{base-image}@{buttons_btn-cta_png}") 0 center repeat-x;
+}</code></pre>
+                </section>
+
+                <section>
+                    <h2>Summary</h2>
+                    <p><strong>7 min</strong> saved by using uglify and cssmin instead of YUI Compressor and Google Closure</p>
+                    <p><strong>3 min</strong> saved by versioning assets</p>
+                </section>
+
+                <section>
+                    <h2>Where to get that plugin ?</h2>
+                    <p>NPM</p>
+                    <code>npm install grunt-assets-versioning</code>
+                    <p>Github</p>
+                    <a href="https://github.com/theasta/grunt-assets-versioning" target="_blank">https://github.com/theasta/grunt-assets-versioning</a>
+                </section>
+
+				<section>
+					<h1>THE END</h1>
+                    <h2>By Alexandrine Boissière</h2>
+                    <h3>@theasta</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

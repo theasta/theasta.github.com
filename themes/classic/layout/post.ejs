@@ -1,0 +1,12 @@
+<div>
+  <article class="hentry" role="article">
+    <%- partial('_partial/article', {post: page, index: false}) %>
+  </article>
+  <% if (config.disqus_shortname && page.comments == true) { %>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"></div>
+  </section>
+  <% } %>
+</div>
+<%- partial('_partial/sidebar') %>

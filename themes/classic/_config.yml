@@ -1,0 +1,23 @@
+# Header
+menu:
+  Blog: /
+  Archives: /blog/archives
+  Talks: /talks/
+rss: /atom.xml
+
+simple_search: http://google.com/search
+recent_posts: 5
+
+# Content
+excerpt_link: Read on &rarr;
+
+# Sidebar
+sidebar: true
+widgets:
+- recent-posts
+
+# Miscellaneous
+google_analytics: UA-24159514-1
+favicon:
+twitter:
+google_plus:
