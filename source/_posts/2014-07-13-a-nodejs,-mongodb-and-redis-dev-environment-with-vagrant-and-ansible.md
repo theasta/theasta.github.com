@@ -1,5 +1,6 @@
 title: 'A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible'
 date: 2014-07-13 16:59:13
+permalink: vagrant-nodejs-dev-environment
 tags:
 ---
 
