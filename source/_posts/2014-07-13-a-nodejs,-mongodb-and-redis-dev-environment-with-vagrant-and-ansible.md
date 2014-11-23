@@ -4,18 +4,25 @@ permalink: vagrant-nodejs-dev-environment
 tags:
 ---
 
-When I want to give a crack at a new library or try out an idea, I almost always use the same tech stack for the backend: Nginx to serve static assets, NodeJS to create an api, MongoDB to store data, and finally Redis to manage sessions.
+> tl;dr: Kick-start your nodejs/nginx/mongodb/redis application development within minutes with the [vagrant-nodejs-dev virtual machine](https://github.com/theasta/vagrant-nodejs-dev).
 
-Since I want to be able to port my dev environment easily, I use a tailor-made virtual machine that I can boot from anywhere as long as I have the following installed:
+When I want to give a crack at a new library or try out an idea, I almost always use the same tech stack for the backend: 
+* Nginx to serve static assets
+* NodeJS to create an api
+* MongoDB to store data
+* Redis to manage sessions
+
+To get started quickly, I use a tailor-made virtual machine. I can boot from anywhere as long as I have the following installed:
+
+* [Virtual Box](https://www.virtualbox.org/) - version 4.3.8+
+* [Vagrant](http://www.vagrantup.com/) - version 1.5.0+
+* [Ansible](http://docs.ansible.com/intro_installation.html) - version 1.5.2+
 <!-- more -->
 
-* [Virtual Box](https://www.virtualbox.org/) - version 4.3.8 [<sup>[1]</sup>](#footnotes)
-* [Vagrant](http://www.vagrantup.com/) - version 1.5.0  [<sup>[1]</sup>](#footnotes)
-* [Ansible](http://docs.ansible.com/intro_installation.html) - version 1.5.2  [<sup>[1]</sup>](#footnotes)
-
-If you want to use this virtual machine, follow the next steps:
+To use this virtual machine, follow the next steps:
 
 ```
+ansible-galaxy install DavidWittman.redis
 git clone https://github.com/theasta/vagrant-nodejs-dev.git
 cd vagrant-nodejs-dev
 vagrant up
@@ -27,8 +34,11 @@ You now have an Ubuntu machine running with nginx, mongodb, nodejs and redis pre
 
 The ansible-nodejs-apps playbook included in the repo will hugely simplify the process.
 
-To boot an app, the playbook relies on the package.json file that should be located at the root of any nodejs server-side app worthy of the name.   
-If ever you are not using server.js as your primary file, you should also update the "script" object with the proper information.
+To boot an app, the playbook relies on:
+* a package.json file
+* a server.js file
+
+If ever you are not using server.js as your primary file, you should update the "script" object with the proper information.
 
 ```
 "scripts": {"start": "node myApp.js"}
@@ -40,7 +50,7 @@ Then, there are two different ways to fire your app.
 
 This is the easiest way: if you have your app at the root of the repo, you have nothing to do than to have, it will get automatically booted.
 
-If your app is listening to port 3000, you can access it at "http://192.168.50.3:3000"[<sup>[2]</sup>](#footnotes)
+If your app is listening to port 3000, you can access it at "http://192.168.50.3:3000" (The network ip is set in Vagrantfile, you can modify if necessary).
 
 ###  Symlink your applications
 
@@ -70,10 +80,3 @@ Then `vagrant reload --provision` and you're all good.
 ## Docker?
 
 I would be curious to know if a docker image based on this vagrant configuration would make it even more straightforward. I would be stoked to hear from you if you have any insights on that matter.
-
-
-<a name="footnotes"></a>
-
-* <sup>[1]</sup> It may also work with newer versions.   
-* <sup>[2]</sup> The network ip is defined in Vagrantfile, you can modify if necessary.
-
