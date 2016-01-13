@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>A faster homepage</title>
+		<meta name="description" content="A Presentation given by a HootSuite dev.">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/hootsuite.css" id="theme">
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+<style>
+.rule-y { color: green; }
+.rule-n { color: red; }
+.rule-yn { color: orange; }
+.center { margin-left:auto !important;margin-right:auto !important;display: block !important; }
+</style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-state="reverse">
+					<h1>Lessons learned from speeding up HootSuite Homepage</h1>
+					<h3>Alexandrine Boissière</h3>
+				</section>
+
+    <section>
+      <h2>2 weeks to make HootSuite homepage faster...</h2>
+      <p>Team of 3 software engineers and 1 product manager</p>
+      <div style="margin-left: auto;margin-right: auto;width: 640px;">
+      <img src="/images/2013-10-07/ooosh_adam.jpg" width="150" height="150">
+      <img src="/images/2013-10-07/ooosh_alex.png" width="150" height="150">
+      <img src="/images/2013-10-07/ooosh_steve.png" width="150" height="150">
+      <img src="/images/2013-10-07/ooosh_margarita.jpg" width="150" height="150">
+      </div>
+    </section>
+
+    <section>
+      <h2>Deterioration in Performance</h2>
+      <div style="width: 620px;" class="center"><img src="/images/2013-10-07/total_transfer_size.png"></div>
+      <ul>
+        <li>Significant increase in file size over the years</li>
+        <li>Switch to SSL</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Deterioration in Performance</h2>
+      <div style="margin-left:auto;margin-right:auto;width:240px;"><a href="http://httparchive.org" target="_blank" rel="external"><img src="/images/2013-10-07/httparchive.png"></a><br>httparchive.org<p></p>
+    </div></section>
+
+    <section>
+      <h2>Front-End Performance Monitoring</h2>
+      <ul>
+        <li>Synthetic tests</li>
+        <li>RUM (Real User Monitoring)</li>
+      </ul>
+    </section>
+
+    <!--<section>-->
+      <!--<h2>RUM - Google Analytics</h2>-->
+      <!--<p>Content &gt; Site Speed<br/><img src="/images/2013-10-07/ga.png" /></p>-->
+    <!--</section>-->
+
+    <section>
+      <h2>RUM - Navigation Timing API</h2>
+      <p>performance.timing</p>
+      <p><img src="/images/2013-10-07/navigationtiming_timeline.png"></p>
+    </section>
+
+    <section>
+      <h2>RUM - Navigation Timing API</h2>
+      <p><img src="/images/2013-10-07/statsd.png"></p>
+      <aside class="notes">No page breakdown, no distinction between visitors with an empty cache vs a primed cache</aside>
+    </section>
+
+    <section>
+      <h2>WebPageTest.org</h2>
+      <p><img src="/images/2013-10-07/wpt_locations.gif"></p>
+    </section>
+
+    <!--<section>-->
+      <!--<h2>WebPageTest.org</h2>-->
+      <!--<p><img src="/images/2013-10-07/wpt_waterfall.gif" /></p>-->
+    <!--</section>-->
+
+    <section>
+      <h2>WebPageTest.org</h2>
+      <p><img src="/images/2013-10-07/wpt_waterfall.png"></p>
+    </section>
+
+    <section>
+      <h2>RUM DIARY</h2>
+      <p><img src="/images/2013-10-07/rum_diary_1.png"></p>
+    </section>
+
+    <section>
+      <h2>RUM DIARY</h2>
+      <p><img src="/images/2013-10-07/rum_diary_2.png"></p>
+    </section>
+
+    <section>
+      <h2>RUM DIARY</h2>
+      <p><img src="/images/2013-10-07/rum_diary_3.png"></p>
+    </section>
+
+    <section>
+      <h2>Metrics</h2>
+      <p>Dulles - Virginia / onLoad Time</p>
+      <ul>
+        <li><a href="http://www.webpagetest.org/result/130720_2E_f28716bb5aa6aef5390feb493d99b7e6/" target="_blank" rel="external">Chrome - 4.4s</a></li>
+        <li><a href="http://www.webpagetest.org/result/130707_YF_375119ae9335502b37b0f06490564f3e/" target="_blank" rel="external">Firefox - 4.5s</a></li>
+        <li><a href="http://rum-diary.herokuapp.com/dashboard#tests/?location=Dulles_IE8&page=7" target="_blank" rel="external">IE8 - 3.4s</a></li>
+        <li><a href="http://www.webpagetest.org/result/130719_50_25a734ebe8be7b9085ec1ab03b29b613/" target="_blank" rel="external">IE9 - 3.3s</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>14 Rules - HPWS - S.Souders</h2>
+      <ol>
+        <li class="rule-y">Make Fewer HTTP Requests</li>
+        <li class="rule-y">Use a Content Delivery Network</li>
+        <li class="rule-y">Add an Expires Header</li>
+        <li class="rule-y">Gzip Components</li>
+        <li class="rule-y">Put Stylesheets at the Top</li>
+        <li class="rule-yn">Put Scripts at the Bottom</li>
+        <li class="rule-y">Avoid CSS Expressions</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>14 Rules - HPWS - S.Souders</h2>
+      <ol start="8">
+        <li class="rule-yn">Make JavaScript and CSS External</li>
+        <li class="rule-yn">Reduce DNS lookups by using Keep-Alive and fewer domains</li>
+        <li class="rule-y">Minify JavaScript</li>
+        <li class="rule-yn">Avoid Redirects</li>
+        <li class="rule-y">Remove Duplicate Scripts</li>
+        <li class="rule-n">Configure ETags</li>
+        <li class="rule-y">Make AJAX Cacheable</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Page Speed Recommendations</h2>
+      <div class="center" style="width:200px"><img src="/images/2013-10-07/page_speed_reco.png"></div>
+    </section>
+
+    <section>
+      <h2>Plan Of Attack : follow the rules</h2>
+      <ul>
+        <li>Optimize Images</li>
+        <li>Put Scripts at the Bottom</li>
+        <li>Reduce DNS lookups</li>
+        <li>Minify HTML</li>
+        <li>Avoid Redirects</li>
+      </ul>
+    </section>
+
+    <!--<section>-->
+      <!--<div class="center" style="width:842px"><img src="/images/2013-10-07/unicorn.png"></div>-->
+    <!--</section>-->
+
+    <!--<section>-->
+      <!--<div class="center" style="width:351px"><img src="/images/2013-10-07/donkey_cat.jpg"></div>-->
+    <!--</section>-->
+
+    <section>
+      <h2>Optimize images</h2>
+      <ul>
+        <li>Shaved off 200 kB</li>
+        <li>Saved ~200ms</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Put Scripts at the Bottom</h2>
+      <div class="center" style="width:600px;"><a href="http://www.webpagetest.org/video/compare.php?tests=130728_8K_1e3fb230880d0cd47d3d71699a769e16%2C130728_SF_ad1815d5dea581dc8db37bb22ec55c80&thumbSize=200&ival=100&end=visual" target="_blank" rel="external"><img src="/images/2013-10-07/visual_progress.png" width="600px" height="396px"></a></div>
+      <ul>
+        <li>No measurable impact on start render time and load time</li>
+        <li>Slightly better visual progress</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Minify HTML</h2>
+      <ul>
+        <li>Trim whitespace : reduce file size down to 3%</li>
+        <li>HTML content download time represents only ~4% of the total load time anyway</li>
+        <li>Saved a few milliseconds</li>
+      </ul>
+      <aside class="notes"><a href="http://www.webpagetest.org/video/compare.php?tests=130802_GX_5f02740853010004437eef0be964c9cd,130802_4F_e5ca188de3446acd6a7fea8cf3962af4" target="_blank" rel="external">Comparison</a></aside>
+    </section>
+
+    <section>
+      <h2>Reduce DNS lookups and SSL Negotiation</h2>
+      <ul>
+        <li>Excessive domain sharding : up to 9 cloudfront domains !</li>
+        <li>Moved to SSL for all asset delivery</li>
+        <li>Plan
+         <ul>
+           <li>conduct tests with 1, 2, 3 cloudfront domains</li>
+          <li>Use DNS-Prefetch link tag</li>
+          </ul>
+        </li>
+      </ul>
+      <p><a href="https://github.com/blog/815-hello-singapore-cdn-experiment" target="_blank" rel="external">Github - Hello Singapore</a> : 1 single asset host + cloudfront FTW</p>
+      <aside class="notes">Some background: over the years we've spent a lot of time optimizing asset delivery. This includes things like js/css asset bundling and using multiple asset hosts. Recently, we started in on another round of optimizations driven by a general goal of decreasing page load times outside of the US, and also by changes in the page load performance profile due to the move to SSL for all asset delivery.
+      There are some reasonable concerns regarding domain sharding in conjunction with SSL, as you not only have an additional DNS lookup and TCP handshake, but also an additional SSL handshake, which can be quite time-consuming.</aside>
+    </section>
+
+    <section>
+      <h2>Reduce DNS lookups and SSL Negotiation</h2>
+      <p>Issues with SSL session resumption (Cloudfront ?)</p>
+      <p><img src="/images/2013-10-07/cloudfront_fail.png"></p>
+    </section>
+
+    <section>
+      <h2>Avoid Redirects - 301 vs 302</h2>
+      <div style="width:400px" class="center"><img src="/images/2013-10-07/redirect_302_firefox.png"></div>
+      <ul>
+        <li>302: Temporary redirect</li>
+        <li>301: Permanent redirect</li>
+      </ul>
+      <div style="width:400px" class="center"><img src="/images/2013-10-07/google_https.png"></div>
+    </section>
+
+    <section>
+      <h2>Inconsistent Results</h2>
+      <p><iframe src="http://www.webpagetest.org/video/view.php?id=130725_1d01d20cf3f0d952f2a415701e5af1312f329f1a&embed=1&width=816&height=384" width="816" height="384"></iframe></p>
+    </section>
+
+    <section>
+      <h2>WebPageTest Configuration</h2>
+      <p>Run 9 tests and return the median values</p>
+      <img src="/images/2013-10-07/data_plots.png">
+    </section>
+
+    <section>
+      <h2>Test Result Data Plots</h2>
+      <div style="width:300px;float:left;">
+        <p>Non Optimized:</p>
+        <ul>
+          <li>4.807s</li>
+          <li>69.047s</li>
+          <li>8.759s</li>
+          <li>4.608s</li>
+          <li>4.685s</li>
+          <li>7.633s</li>
+          <li>4.682s</li>
+          <li><strong style="color:#003366">4.954s</strong></li>
+          <li>5.129s</li>
+      </ul></div>
+      <div style="width:300px;float:right;margin-right:150px;">
+        <p>Optimized:</p>
+        <ul>
+          <li>4.659s</li>
+          <li>4.408s</li>
+          <li>3.793s</li>
+          <li>3.877s</li>
+          <li>3.953s</li>
+          <li>4.422s</li>
+          <li><strong style="color:#003366">4.272s</strong></li>
+          <li>4.084s</li>
+          <li>4.284s</li>
+      </ul></div>
+    </section>
+
+    <section>
+      <h2>Plan B</h2>
+      <ul>
+        <li>Go through the RUM DIARY logs</li>
+        <li>Find the quickest and slowest runs (from ~2.5 to ~70s)</li>
+        <li>Analyse the waterfalls</li>
+        <li>Find out why tests were slow or fast</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>1/5 - Third Party Tracking Libraries</h2>
+      <ul>
+        <li>26 requests over 65 - 16 different hostnames</li>
+        <li>SPOF</li>
+        <li>Solution : load them after the load event</li>
+        <li>Improvement: more than 1s</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2/5 - Request your css and js files first</h2>
+      <div class="center" style="width:481px"><img src="/images/2013-10-07/internal_first.png"></div>
+    </section>
+
+    <section>
+      <h2>2/5 - Request your css and js files first</h2>
+      <ul>
+        <li>Remove
+          <ul>
+            <li>&lt;link rel="icon" href="hs_16x16.png" sizes="16x16"&gt;</li>
+            <li>&lt;link rel="icon" href="hs_32x32.png" sizes="32x32"&gt;</li>
+            <li>and 2 others..</li>
+          </ul>
+        </li>
+        <li>Remove &lt;link rel="shortcut icon" href="/favicon.ico"&gt; from the html doc</li>
+        <li>Lazy load inline images displayed under the fold</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3/5 - Prefer the load event to $.ready to lazy load resources</h2>
+      <p>Password strength checker : 351.1 KB</p>
+      <p>Cloudfront often failed to deliver that file quickly</p>
+      <div class="center"><img src="/images/2013-10-07/wtf_password_hanging_up.png"></div>
+    </section>
+
+    <section>
+      <h2>4/5 - Minimize backend data inserted directly into the document</h2>
+      <ul>
+        <li>50% html document = json data inserted in an inline script</li>
+        <li>Big impact on the TTFB</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5/5 - Optimize JavaScript Code</h2>
+      <h3>DOMContentLoaded event: ~400ms</h3>
+      <div><img src="/images/2013-10-07/domcontentloaded_long.png"></div>
+    </section>
+
+    <section>
+      <h2>5/5 - Optimize JavaScript Code</h2>
+      <h3>DOMContentLoaded event: ~20ms</h3>
+      <p>Don't initialize code in your JavaScript files.<br>Use a main bootstrap script.</p>
+      <div><img src="/images/2013-10-07/domcontentloaded_small.png"></div>
+    </section>
+
+    <section>
+      <h2>Final Result</h2>
+      <p>From 4.5s to 2.0s - Firefox, Dulles, Virginia</p>
+      <iframe src="http://www.webpagetest.org/video/view.php?id=130721_f303ce563bf02e5e5385d479625e25f443d41489&embed=1&width=816&height=384" width="816" height="384"></iframe>
+    </section>
+
+    <section>
+      <h2>Lessons learned</h2>
+      <ul>
+        <li>Go beyond WPO Rules !</li>
+        <li>Don't focus on WPT median values</li>
+        <li>Check all the runs</li>
+        <li>Understand the waterfall</li>
+        <li>Find out what make <strong>you</strong> slow : fix it !</li>
+        <li>Find out what make <strong>you</strong> fast : make sure it always happens !</li>
+        <li>Optimize your JavaScript code !</li>
+      </ul>
+    </section>
+
+				<section data-state="reverse">
+					<h1>Thank You!</h1>
+					<h3>@theasta</h3>
+					<h3>alexandrine.boissiere@hootsuite.com</h3>
+				</section>
+			</div>
+		</div>
+
+		<script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+	</body>
+</html>

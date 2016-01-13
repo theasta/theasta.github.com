@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <title>new Date(&#39;2012/01/01&#39;) vs new Date(&#39;2012-01-01&#39;) | Theasta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="new Date('2012/01/01') vs new Date('2012-01-01')">
+<meta property="og:url" content="http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/index.html">
+<meta property="og:site_name" content="Theasta">
+<meta property="og:description" content="When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.">
+<meta property="og:updated_time" content="2014-11-23T21:34:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="new Date('2012/01/01') vs new Date('2012-01-01')">
+<meta name="twitter:description" content="When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.">
+  
+  <link rel="alternative" href="/atom.xml" title="Theasta" type="application/atom+xml">
+  
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24159514-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+<body   >
+<header role="banner"><hgroup>
+  <h1><a href="http://www.theasta.net/">Theasta</a></h1>
+  
+  <h2>Techniques of The Professional PixPocket</h2>
+  
+</hgroup></header>
+<nav role="navigation">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+</ul>
+
+
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:http://www.theasta.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  
+  <li><a href="/">Blog</a></li>
+  
+  <li><a href="/blog/archives">Archives</a></li>
+  
+  <li><a href="/talks/">Talks</a></li>
+  
+</ul></nav>
+<div id="main">
+  <div id="content">
+    <div>
+  <article class="hentry" role="article">
+      <header>
+    <h1 class="entry-title">
+      
+        new Date(&#39;2012/01/01&#39;) vs new Date(&#39;2012-01-01&#39;)
+      
+    </h1>
+    <p class="meta">
+      <time datetime="2012-02-13T04:13:00.000Z">Feb 12 2012</time>
+
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+      <p>When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.</p>
+<a id="more"></a>
+<p>For example, since I’m living in Vancouver, </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'January 1, 2012'</span>)</span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012/01/01'</span>)</span><br></pre></td></tr></table></figure>
+<p>returns in Chrome</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;Tue Jan 01 2012 00:00:00 GMT-0800 (PST)&#34;.</span><br></pre></td></tr></table></figure>
+<p>If I was in Paris, it would return</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;Tue Jan 01 2012 00:00:00 GMT+0100&#34;</span><br></pre></td></tr></table></figure>
+<p>etc..</p>
+<p>So far so good ! Until I discovered today that a very minor change in my dateString format could make the Date constructor behave unpredictably. Indeed :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>)</span><br></pre></td></tr></table></figure>
+<p>returns in Chrome</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mon Dec 31 2011 16:00:00 GMT-0800 (PST)</span><br></pre></td></tr></table></figure>
+<p>Which is actually Tue Jan 01 2012 00:00:00 <strong>but GMT</strong>.<br>My date string was interpreted in <strong>universal time instead of local time</strong>.</p>
+<p>It’s all but trivial since:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>).getFullYear() <span class="comment">//will return 2011 if you're behind GMT !!</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="ISO_8601_format"><a href="#ISO_8601_format" class="headerlink" title="ISO 8601 format"></a>ISO 8601 format</h3><p>The thing is “2012-01-01” is a ISO 8601 format, which support started with javascript 1.8.5.<br>As “2012/01/01” is a shorthand for “2012/01/01 00:00:00”, “2012-01-01” stands for “2012-01-01T00:00:00”.<br>Unfortunately, “2012-01-01T00:00:00” implies <strong>GMT timezone</strong>. If I want to get Jan 1, 2012 in Vancouver time, I have to use “2012-01-01T00:00:00-0800”.</p>
+<p>Though it is tempting to use the mysql-like YYYY-MM-DD formatting, it’s probably better to simply avoid it since it’s not supported by old browsers (I tried on IE8 and IE7, it failed !), and tricky when it comes to new ones.</p>
+<h3 id="Quick_reminder"><a href="#Quick_reminder" class="headerlink" title="Quick reminder"></a>Quick reminder</h3><p>Here is a quick reminder of the different results I got (you may have other results depending on where you live) :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** UTC DATE Reference **/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="built_in">Date</span>.UTC(<span class="number">2012</span>,<span class="number">0</span>,<span class="number">1</span>));</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01T00:00:00+0000'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//=&gt; Mon Dec 31 2011 16:00:00 GMT-0800 (PST)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** LOCAL DATE */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2012</span>,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'January 1, 2012'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012/01/01'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01T00:00:00-0800'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//=&gt; Tue Jan 01 2012 00:00:00 GMT-0800 (PST)</span></span><br></pre></td></tr></table></figure>
+<p><em>Please note:</em><br>What is true for Date constructor is also true for <strong>Date.parse</strong> static method.</p>
+<p><em>Please note 2:</em><br>Chrome interprets in local time the following code :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">"2012-01-01 00:00:00"</span>);</span><br></pre></td></tr></table></figure>
+<p>So the simple fact to add a time makes you jump from GMT to local time.</p>
+<p>Firefox doesn’t understand this format and it’s probably for the best.</p>
+
+    
+  </div>
+  
+
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"></div>
+  </section>
+  
+</div>
+<aside class="sidebar">
+  
+  
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+    <li class="post">
+      <a href="/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/">Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2014/07/13/vagrant-nodejs-dev-environment/">A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2013/02/11/adding-requirejs-to-nodecellar/">Adding RequireJs to NodeCellar</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/24/external-stylesheets-and-web-performance/">External Stylesheets and Web Performance</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/23/three-key-moments-web-performance/">Three Key Moments to keep in mind when dealing with page load performance</a>
+    </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+  </div>
+</div>
+<footer role="contentinfo">
+  <p>
+    Copyright &copy; 2016 Theasta<br>
+    <span class="credit">Powered by <a href="http://hexo.io/">Hexo</a> - Octopress classic theme</span>
+  </p>
+</footer>
+
+<script>
+  var disqus_shortname = 'theastaoctopress';
+  
+  var disqus_url = 'http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+</body>
+</html>

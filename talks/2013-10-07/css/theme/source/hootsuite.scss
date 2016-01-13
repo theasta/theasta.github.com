@@ -1,0 +1,135 @@
+/**
+ * A simple theme for reveal.js presentations, similar
+ * to the default theme. The accent color is brown.
+ *
+ * This theme is Copyright (C) 2012-2013 Owen Versteeg, http://owenversteeg.com - it is MIT licensed.
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Import Banda --------------------------------
+@font-face {
+    font-family: 'banda-regular-normal';
+    src: url('../../fonts/banda_regular-webfont.eot');
+    src: url('../../fonts/banda_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/banda_regular-webfont.woff') format('woff'),
+         url('../../fonts/banda_regular-webfont.ttf') format('truetype'),
+         url('../../fonts/banda_regular-webfont.svg#banda_regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+$banda: 'banda-regular-normal', 'Trebuchet MS', Trebuchet, sans-serif;
+// --------------------------
+
+
+
+// import and add Banda
+// override theme settings for font, text/colour
+// somehow add the start and stop slide
+
+
+
+// Override theme settings (see ../template/settings.scss)
+
+$backgroundColor: white;
+$mainFont: Helvetica, Arial, sans-serif;
+$mainFontSize: 32px;
+$mainColor: #666;
+$headingFont: $banda;	// used for all hX's
+$headingColor: #036;
+$headingLetterSpacing: -0.05em;
+$headingTextTransform: none;
+$headingTextShadow: none;
+$heading1TextShadow: $headingTextShadow;
+$brandColor: #036;
+$linkColor: $brandColor;
+
+
+
+
+// some overriding styles
+
+.reveal {
+	// align left all teh thingz
+	.slides {
+		text-align: left !important;
+	}
+	// make code readable for presentations
+	pre {
+		font-size: 1.2em!important;
+		width: 100%!important;
+		word-wrap: normal!important;
+
+		code {
+			font-size: 1em!important;
+			max-height: none!important;
+		}
+	}
+
+	h1 {
+		font-size: 3em;
+		line-height: 120%;
+	}
+
+	p {
+		line-height: 1.4em!important;
+	}
+
+	li {
+		margin-bottom: 0.5em;
+	}
+	.pause-overlay {
+		background-color: $brandColor!important;
+	}
+
+	section img {
+		border: none!important;
+	}
+}
+
+
+
+
+
+
+// Reversed Styles
+.reverse {
+	.slide-background.present {
+		// background-color: #036 !important;
+		@include radial-gradient($brandColor, lighten($brandColor, 10%));
+
+	}
+	.slides * {
+		color: white !important;
+	}
+	.slides a {
+		color: white; 
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
+
+
+
+
+
+.reveal a:not(.image) {
+  line-height: 1.3em;
+}
+
+
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------

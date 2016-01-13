@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <title>Theasta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="(function (){
+
+				var back = document.getElementById( &apos;back&apos; ),
+						ahead = document.getElementById( &apos;ahead&apos; ),
+						slideto = document.getElementById( &apos;slideto&apos; ),
+						reveal =  window.frames[0">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Theasta">
+<meta property="og:url" content="http://www.theasta.net/talks/2013-05-25/plugin/postmessage/example.html">
+<meta property="og:site_name" content="Theasta">
+<meta property="og:description" content="(function (){
+
+				var back = document.getElementById( &apos;back&apos; ),
+						ahead = document.getElementById( &apos;ahead&apos; ),
+						slideto = document.getElementById( &apos;slideto&apos; ),
+						reveal =  window.frames[0">
+<meta property="og:updated_time" content="2014-11-23T21:34:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Theasta">
+<meta name="twitter:description" content="(function (){
+
+				var back = document.getElementById( &apos;back&apos; ),
+						ahead = document.getElementById( &apos;ahead&apos; ),
+						slideto = document.getElementById( &apos;slideto&apos; ),
+						reveal =  window.frames[0">
+  
+  <link rel="alternative" href="/atom.xml" title="Theasta" type="application/atom+xml">
+  
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24159514-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+<body   >
+<header role="banner"><hgroup>
+  <h1><a href="http://www.theasta.net/">Theasta</a></h1>
+  
+  <h2>Techniques of The Professional PixPocket</h2>
+  
+</hgroup></header>
+<nav role="navigation">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+</ul>
+
+
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:http://www.theasta.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  
+  <li><a href="/">Blog</a></li>
+  
+  <li><a href="/blog/archives">Archives</a></li>
+  
+  <li><a href="/talks/">Talks</a></li>
+  
+</ul></nav>
+<div id="main">
+  <div id="content">
+    <div>
+  <article class="hentry" role="article">
+      <header>
+    <h1 class="entry-title">
+      
+        
+      
+    </h1>
+    <p class="meta">
+      <time datetime="2016-01-13T06:19:58.000Z">Jan 12 2016</time>
+
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+      <html>
+	<body>
+
+		<iframe id="reveal" src="../../index.html" style="border: 0;" width="500" height="500"></iframe>
+
+		<div>
+			<input id="back" type="button" value="go back">
+			<input id="ahead" type="button" value="go ahead">
+			<input id="slideto" type="button" value="slideto 2-2">
+		</div>
+
+		<script>
+
+			(function (){
+
+				var back = document.getElementById( 'back' ),
+						ahead = document.getElementById( 'ahead' ),
+						slideto = document.getElementById( 'slideto' ),
+						reveal =  window.frames[0];
+
+					back.addEventListener( 'click', function () {
+						
+					reveal.postMessage( JSON.stringify({method: 'prev', args: []}), '*' );
+				}, false );
+
+				ahead.addEventListener( 'click', function (){
+					reveal.postMessage( JSON.stringify({method: 'next', args: []}), '*' );
+				}, false );
+
+				slideto.addEventListener( 'click', function (){
+					reveal.postMessage( JSON.stringify({method: 'slide', args: [2,2]}), '*' );
+				}, false );
+
+			}());
+
+		</script>
+
+	</body>
+</html>
+
+    
+  </div>
+  
+
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"></div>
+  </section>
+  
+</div>
+<aside class="sidebar">
+  
+  
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+    <li class="post">
+      <a href="/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/">Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2014/07/13/vagrant-nodejs-dev-environment/">A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2013/02/11/adding-requirejs-to-nodecellar/">Adding RequireJs to NodeCellar</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/24/external-stylesheets-and-web-performance/">External Stylesheets and Web Performance</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/23/three-key-moments-web-performance/">Three Key Moments to keep in mind when dealing with page load performance</a>
+    </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+  </div>
+</div>
+<footer role="contentinfo">
+  <p>
+    Copyright &copy; 2016 Theasta<br>
+    <span class="credit">Powered by <a href="http://hexo.io/">Hexo</a> - Octopress classic theme</span>
+  </p>
+</footer>
+
+<script>
+  var disqus_shortname = 'theastaoctopress';
+  
+  var disqus_url = 'http://www.theasta.net/talks/2013-05-25/plugin/postmessage/example.html';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+</body>
+</html>

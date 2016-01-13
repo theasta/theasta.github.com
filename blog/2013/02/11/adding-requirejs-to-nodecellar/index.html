@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <title>Adding RequireJs to NodeCellar | Theasta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Nodecellar is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. The source code was made available on Github by its author, Christophe Coenraets, so everyone can">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adding RequireJs to NodeCellar">
+<meta property="og:url" content="http://www.theasta.net/blog/2013/02/11/adding-requirejs-to-nodecellar/index.html">
+<meta property="og:site_name" content="Theasta">
+<meta property="og:description" content="Nodecellar is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. The source code was made available on Github by its author, Christophe Coenraets, so everyone can">
+<meta property="og:image" content="http://www.theasta.net/images/2013-02/nodecellar_network_initial.gif">
+<meta property="og:image" content="http://www.theasta.net/images/2013-02/nodecellar_network_final.gif">
+<meta property="og:updated_time" content="2016-01-13T06:25:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adding RequireJs to NodeCellar">
+<meta name="twitter:description" content="Nodecellar is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. The source code was made available on Github by its author, Christophe Coenraets, so everyone can">
+  
+  <link rel="alternative" href="/atom.xml" title="Theasta" type="application/atom+xml">
+  
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24159514-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+<body   >
+<header role="banner"><hgroup>
+  <h1><a href="http://www.theasta.net/">Theasta</a></h1>
+  
+  <h2>Techniques of The Professional PixPocket</h2>
+  
+</hgroup></header>
+<nav role="navigation">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+</ul>
+
+
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:http://www.theasta.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  
+  <li><a href="/">Blog</a></li>
+  
+  <li><a href="/blog/archives">Archives</a></li>
+  
+  <li><a href="/talks/">Talks</a></li>
+  
+</ul></nav>
+<div id="main">
+  <div id="content">
+    <div>
+  <article class="hentry" role="article">
+      <header>
+    <h1 class="entry-title">
+      
+        Adding RequireJs to NodeCellar
+      
+    </h1>
+    <p class="meta">
+      <time datetime="2013-02-11T18:19:00.000Z">Feb 11 2013</time>
+
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+      <p><a href="http://nodecellar.coenraets.org/" target="_blank" rel="external">Nodecellar</a> is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. <a href="https://github.com/ccoenraets/nodecellar" target="_blank" rel="external">The source code</a> was made available on Github by its author, Christophe Coenraets, so everyone can dig into it and learn how to use those brilliant libraries and tools.</p>
+<p>However, it felt like a key player was forgotten on the invite list : <a href="http://requirejs.org/" target="_blank" rel="external">RequireJs</a>, the infamous javascript file loader. Since I was curious to know how difficult it could be to add RequireJs to an existing application and turn all its javascript code into modules, I decided to take a crack at it and to record the process by committing each step on my <a href="https://github.com/theasta/nodecellar-requirejs" target="_blank" rel="external">nodecellar fork</a> on Github.</p>
+<a id="more"></a>
+<h2 id="Why_am_I_doing_this_in_the_first_place__3F"><a href="#Why_am_I_doing_this_in_the_first_place__3F" class="headerlink" title="Why am I doing this in the first place ?"></a>Why am I doing this in the first place ?</h2><p>RequireJs has three positive impacts when used to its full potential. It improves :</p>
+<ul>
+<li>web performance</li>
+<li>quality of code</li>
+<li>CI and ease of deployment</li>
+</ul>
+<h3 id="Web_Performance_Optimization"><a href="#Web_Performance_Optimization" class="headerlink" title="Web Performance Optimization"></a>Web Performance Optimization</h3><p>Let’s navigate the <a href="http://nodecellar.coenraets.org/" target="_blank" rel="external">nodecellar website</a> and have a look at the network panel:</p>
+<p><img src="/images/2013-02/nodecellar_network_initial.gif" alt="Network Panel"></p>
+<p>A bunch of js files and templates are loaded though most of them are not needed right away, they are relevant to other pages, like the about section, the user may never navigate to.</p>
+<h3 id="Number_One_Rule_in_Web_Performance__3A_Make_less_HTTP_requests"><a href="#Number_One_Rule_in_Web_Performance__3A_Make_less_HTTP_requests" class="headerlink" title="Number One Rule in Web Performance : Make less HTTP requests"></a>Number One Rule in Web Performance : Make less HTTP requests</h3><p>We could easily improve the browser display speed by combining the scripts together. It could be one big file containing all the code needed by the application, or several files organized by sections of content.</p>
+<p>RequireJs provides an optimization tool that will help us to do so.</p>
+<p>Here’s the structure I opted for :</p>
+<ul>
+<li>a base javascript file with all the shared libraries (jquery, underscore, backbone, …)</li>
+<li>a javascript file by main sections<ul>
+<li>home.js</li>
+<li>list.js</li>
+<li>about.js</li>
+<li>addview.js</li>
+</ul>
+</li>
+</ul>
+<p>To achieve this goal, it’s important to have a clear view of file dependencies. Unfortunately, JavaScript doesn’t provide any kind of include mechanism. RequireJs does via its <a href="https://github.com/amdjs/amdjs-api/wiki/AMD" target="_blank" rel="external">Asynchronous Module Definition (AMD) API</a>.</p>
+<h3 id="Quality_of_Code__26amp_3B_Modules"><a href="#Quality_of_Code__26amp_3B_Modules" class="headerlink" title="Quality of Code &amp; Modules"></a>Quality of Code &amp; Modules</h3><p>RequireJs provides a way to define and require modules.<br>Each module lives on its own and lists its dependencies.</p>
+<p>There are several advantages to this approach :</p>
+<ul>
+<li>it avoids polluting the global namespace</li>
+<li>it ensures loose-coupling</li>
+</ul>
+<p>Let’s get to the meat and write some code.</p>
+<h2 id="Removing_script_tags"><a href="#Removing_script_tags" class="headerlink" title="Removing script tags"></a>Removing script tags</h2><p>First of all, we’re going to remove all the script tags from the index.html and replace them with the following snippet :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script data-main=&#34;js/common&#34; src=&#34;js/lib/require.js&#34;&#62;&#60;/script&#62;</span><br></pre></td></tr></table></figure>
+<p>This script tag is going to load the require.js library. Once this file is loaded, parsed and executed, it’s going to request asynchronously the file specified by the data-main attribute. It is a usual practice to name that file main.js but in this case this filename was already taken.</p>
+<p>This common.js file will serve as our base file and will have several purposes :</p>
+<ul>
+<li>require all other files we removed from the html page</li>
+<li>bootstrap the application.</li>
+</ul>
+<h2 id="Require_all_js_files_from_common-js"><a href="#Require_all_js_files_from_common-js" class="headerlink" title="Require all js files from common.js"></a>Require all js files from common.js</h2><p>Let’s require first the main libraries :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(</span><br><span class="line">    [</span><br><span class="line">        <span class="string">'js/lib/jquery-1.8.2.min.js'</span>,</span><br><span class="line">        <span class="string">'js/lib/underscore-min.js'</span>,</span><br><span class="line">        <span class="string">'js/lib/backbone-min.js'</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// bootstrap code</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>If you do so, you will likely end up with this occasional error : <em>‘Module name “underscore” has not been loaded yet for context: _. Use require([])’</em>.<br>It happens because RequireJs loads scripts asynchronously and <strong>out of order</strong>.<br>Since Backbone depends on Underscore, if ever it is loaded and executed first, an error will be thrown.</p>
+<p>To fix this error :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    shim: &#123;</span><br><span class="line">        <span class="string">'js/lib/backbone-min.js'</span>: &#123;</span><br><span class="line">            deps: [<span class="string">'js/lib/underscore-min.js'</span>, <span class="string">'js/lib/jquery-1.8.2.min.js'</span>],</span><br><span class="line">            exports: <span class="string">'Backbone'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The shim object allows us to declare dependencies for “traditional” JavaScript files and define which variable we would ultimately like to export. It’s a baby step towards writing modular code without needing any kind of refactoring.</p>
+<p>Now it’s time to make our life easier and stop using long filenames everytime we want to refer to a script. Strings don’t get minified so it’s better to shorten them if used repeatdly.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        <span class="string">'jquery'</span>: <span class="string">'lib/jquery-1.8.2.min'</span>,</span><br><span class="line">        <span class="string">'underscore'</span>: <span class="string">'lib/underscore-min'</span>,</span><br><span class="line">        <span class="string">'backbone'</span>: <span class="string">'lib/backbone-min'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    shim: &#123;</span><br><span class="line">        <span class="string">'backbone'</span>: &#123;</span><br><span class="line">            deps: [<span class="string">'underscore'</span>, <span class="string">'jquery'</span>],</span><br><span class="line">            exports: <span class="string">'Backbone'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">require</span>([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// bootstrap code</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Here’s how <a href="https://github.com/theasta/nodecellar-requirejs/blob/f34ed6dec31a70c17895eb94c86ea8813f1812a6/public/js/common.js" target="_blank" rel="external">common.js looks like</a> at the end of that step.</p>
+<h3 id="Moving_the_bootstrap_code_into_the_require_callback"><a href="#Moving_the_bootstrap_code_into_the_require_callback" class="headerlink" title="Moving the bootstrap code into the require callback"></a>Moving the bootstrap code into the require callback</h3><p>The second argument of the require function is an anonymous function that will be triggered as soon as all the js files are loaded and executed. This is the perfect place to bootstrap the application.<br>In its original form, NodeCellar was initialized at the end of main.js file. We’re going to move this initialization code into the require callback.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>, <span class="string">'approuter'</span>, <span class="string">'bootstrap'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, Backbone, AppRouter</span>)</span>&#123;</span><br><span class="line">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">window</span>.app = <span class="keyword">new</span> AppRouter();</span><br><span class="line">        Backbone.history.start();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Since the diminished main.js file only contains the application router definition, I renamed it approuter.js.</p>
+<h3 id="Using_RequireJs_to_load_the_templates"><a href="#Using_RequireJs_to_load_the_templates" class="headerlink" title="Using RequireJs to load the templates"></a>Using RequireJs to load the templates</h3><p>The NodeCellar app was loading all templates asynchronously when the DOM was ready, which is a good thing. Let’s improve this by only loading templates when actually needed.<br>RequireJs has a text plugin that allows to specify a template as a text dependency.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">"underscore"</span>, <span class="string">"text!../tpl/WineView.html"</span>, <span class="string">"views/winedetails"</span>],</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">_, WineViewTpl, WineView</span>) </span>&#123;</span><br><span class="line">        WineView.prototype.template = _.template(WineViewTpl);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>Here’s the <a href="https://github.com/theasta/nodecellar-requirejs/commit/74351404c99075f12dbbfd0fdd6163ad41cb6460" target="_blank" rel="external">commit summary</a>.</p>
+<h3 id="Creating_one_file_by_section"><a href="#Creating_one_file_by_section" class="headerlink" title="Creating one file by section"></a>Creating one file by section</h3><p>My goal is to create one javascript file by section. Those sections are actually already defined in the Backbone router (approuter.js). All we have to do is to create one actual ‘physical’ file by section so we can run the RequireJs optimizer on each of them later.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> AppRouter = Backbone.Router.extend(&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    home: <span class="function"><span class="keyword">function</span>(<span class="params">id</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">require</span>([<span class="string">'routes/home'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    list: <span class="function"><span class="keyword">function</span>(<span class="params">page</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">require</span>([<span class="string">'routes/list'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then each section file will require what it needs.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">define([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'home'</span>, <span class="string">'text!homeview'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, HomeView, HomeViewTpl</span>)</span>&#123;</span><br><span class="line">    HomeView.prototype.template = _.template(HomeViewTpl);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Turn_js_files_into_modules"><a href="#Turn_js_files_into_modules" class="headerlink" title="Turn js files into modules"></a>Turn js files into modules</h3><p>So far, the original scripts were not modified. We do use RequireJs to load them but they are not modules yet. Code is still shared accross files through the global namespace.</p>
+<p>It’s time now to create well-scoped and self-contained modules. Here’s the steps I took for each file:</p>
+<ul>
+<li>wrap the content into a define method</li>
+<li>list all the dependencies, pass them as arguments in the callback function</li>
+<li>export an object or a function, depending on my needs.</li>
+</ul>
+<p>Here’s what the WineCollection will look like after this step :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>, <span class="string">'WineModel'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, Backbone, Wine</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Backbone.Collection.extend(&#123;</span><br><span class="line">        model: Wine,</span><br><span class="line">        url: <span class="string">"/wines"</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Notice we don’t even need to name it WineCollection anymore.</p>
+<p>To use this collection function, we only need to require it.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'path/to/winecollection.js'</span>, <span class="string">'path/to/another/module'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">WineCol, anothermodule</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myWineCollection = <span class="keyword">new</span> WineCol();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>Now if you type WineCollection in the console, you won’t have access to its definition anymore. The global namespace has been successfully uncluttered.</p>
+<p>Here’s the <a href="https://github.com/theasta/nodecellar-requirejs/commit/b338a8a2c76b39ab224cf942843d7a615d8a2e08" target="_blank" rel="external">commit summary</a>.</p>
+<h3 id="Cleaning_common-js"><a href="#Cleaning_common-js" class="headerlink" title="Cleaning common.js"></a>Cleaning common.js</h3><p>Now that all files are modules, list and load their own dependencies, I could remove from common.js:</p>
+<ul>
+<li>all unnecessary shim configuration</li>
+<li>all references to files that were not needed to bootstrap the application (e.g. the paginator, the templates..).</li>
+</ul>
+<p>However I kept references to files that were a shared resource shared like jquery, bootstrap, underscore, backbone. After all it was the purpose behind common.js.</p>
+<h3 id="Adding_a_build_script"><a href="#Adding_a_build_script" class="headerlink" title="Adding a build script"></a>Adding a build script</h3><p>It’s time to give a try to the optimization tool. First thing, we need to include <a href="https://github.com/jrburke/r.js" target="_blank" rel="external">r.js</a> and to create a <a href="https://github.com/theasta/nodecellar-requirejs/blob/master/build-tools/build.js" target="_blank" rel="external">build script</a>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(&#123;</span><br><span class="line">    appDir: <span class="string">"../public"</span>,</span><br><span class="line">    baseUrl: <span class="string">"js"</span>,</span><br><span class="line">    mainConfigFile: <span class="string">"../public/js/common.js"</span>,</span><br><span class="line">    dir: <span class="string">"../public-built"</span>,</span><br><span class="line">    modules: [</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">"common"</span>,</span><br><span class="line">            include: <span class="string">"text"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/home"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/about"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/list"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/addview"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>The mainConfigFile is important. It allows the build script to use the requirejs configuration we already set up in common.js. We could also copy and paste the configuration into that build script but let’s stay DRY.</p>
+<p>To run the optimizer :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.js -o build.js</span><br></pre></td></tr></table></figure></p>
+<p>The optimization tool will create a copy of the public folder, named it as requested ‘public-built’ and optimize JavaScript assets (and also the css files but let’s keep that for later).</p>
+<h3 id="Modifying_the_server-js_file"><a href="#Modifying_the_server-js_file" class="headerlink" title="Modifying the server.js file"></a>Modifying the server.js file</h3><p>In order to test the optimized version, we need to modify the node script “server.js” so it serves static files from the public-built in a production environment.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(express.static(path.join(__dirname, (process.env.NODE_ENV === <span class="string">'production'</span>) ? <span class="string">'public-built'</span> : <span class="string">'public'</span>)));</span><br></pre></td></tr></table></figure>
+<p>Then run<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NODE_ENV=production node server.js</span><br></pre></td></tr></table></figure></p>
+<p>Now let’s have a look at the network panel.</p>
+<p><img src="/images/2013-02/nodecellar_network_final.gif" alt="Network Panel"></p>
+<p>Voilà !</p>
+<p><em>Nota Bene: The andika.js is an external JavaScript file (<a href="http://use.edgefonts.net/andika.js" target="_blank" rel="external">http://use.edgefonts.net/andika.js</a>) that allows us to use the Andika Web Font. It was not captured in the first panel screenshot though it was already there).</em></p>
+
+    
+  </div>
+  
+
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"></div>
+  </section>
+  
+</div>
+<aside class="sidebar">
+  
+  
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+    <li class="post">
+      <a href="/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/">Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2014/07/13/vagrant-nodejs-dev-environment/">A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2013/02/11/adding-requirejs-to-nodecellar/">Adding RequireJs to NodeCellar</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/24/external-stylesheets-and-web-performance/">External Stylesheets and Web Performance</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/23/three-key-moments-web-performance/">Three Key Moments to keep in mind when dealing with page load performance</a>
+    </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+  </div>
+</div>
+<footer role="contentinfo">
+  <p>
+    Copyright &copy; 2016 Theasta<br>
+    <span class="credit">Powered by <a href="http://hexo.io/">Hexo</a> - Octopress classic theme</span>
+  </p>
+</footer>
+
+<script>
+  var disqus_shortname = 'theastaoctopress';
+  
+  var disqus_url = 'http://www.theasta.net/blog/2013/02/11/adding-requirejs-to-nodecellar/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+</body>
+</html>

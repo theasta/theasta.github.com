@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/index.html</loc>
+    <lastmod>2016-01-13T06:56:12.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/index.html</loc>
+    <lastmod>2016-01-13T06:56:03.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/index.html</loc>
+    <lastmod>2016-01-13T06:53:26.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2013/02/11/adding-requirejs-to-nodecellar/</loc>
+    <lastmod>2016-01-13T06:25:48.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2012/06/23/three-key-moments-web-performance/</loc>
+    <lastmod>2016-01-13T06:23:55.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2014/07/13/vagrant-nodejs-dev-environment/</loc>
+    <lastmod>2014-11-23T21:49:48.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/multiplex/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/zoom-js/zoom.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/search/search.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/remotes/remotes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/print-pdf/print-pdf.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/postmessage/postmessage.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/postmessage/example.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/notes-server/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/notes-server/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/notes-server/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/notes/notes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/notes/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/multiplex/master.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/multiplex/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/multiplex/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/math/math.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/markdown/marked.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/markdown/markdown.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/leap/leap.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/plugin/highlight/highlight.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/lib/js/html5shiv.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/lib/js/head.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/lib/js/classList.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/lib/css/zenburn.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/js/reveal.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/js/reveal.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2012/06/24/external-stylesheets-and-web-performance/</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/solarized.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/sky.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/simple.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/serif.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/night.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/moon.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/hootsuite.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/default.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/beige.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/theme/README.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/reveal.min.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/reveal.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/print/pdf.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-10-07/css/print/paper.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/zoom-js/zoom.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/search/search.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/remotes/remotes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/print-pdf/print-pdf.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/postmessage/postmessage.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/postmessage/example.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/notes-server/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/notes-server/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/notes-server/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/notes/notes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/notes/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/multiplex/master.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/multiplex/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/markdown/marked.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/markdown/markdown.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/plugin/highlight/highlight.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/lib/js/html5shiv.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/lib/js/head.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/lib/js/classList.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/lib/css/zenburn.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/js/reveal.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/js/reveal.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/solarized.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/sky.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/simple.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/serif.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/night.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/moon.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/default.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/beige.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/theme/README.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/reveal.min.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/reveal.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/print/pdf.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-25/css/print/paper.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/zoom-js/zoom.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/search/search.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/remotes/remotes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/print-pdf/print-pdf.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/postmessage/postmessage.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/postmessage/example.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/notes-server/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/notes-server/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/notes-server/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/notes/notes.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/notes/notes.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/multiplex/master.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/multiplex/index.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/multiplex/client.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/markdown/marked.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/markdown/markdown.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/plugin/highlight/highlight.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/lib/js/html5shiv.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/lib/js/head.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/lib/js/classList.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/lib/css/zenburn.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/js/reveal.min.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/js/reveal.js</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/index.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/solarized.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/sky.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/simple.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/serif.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/night.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/moon.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/default.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/beige.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/theme/README.html</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/reveal.min.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/reveal.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/print/pdf.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.theasta.net/talks/2013-05-22/css/print/paper.css</loc>
+    <lastmod>2014-11-23T21:34:01.000Z</lastmod>
+  </url>
+  
+</urlset>
