@@ -103,4 +103,4 @@ stylus:
 deploy:
   type: git
   repo: https://github.com/theasta/theasta.github.com.git
-  branch: gh-pages
+  branch: master
