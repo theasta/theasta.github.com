@@ -64,5 +64,5 @@ It has a big impact on both Progressive Rendering and Document Complete time.
 The number of components that can be loaded simultaneously depends on the web browser. For example, IE6 & IE7 limit parallel downloads to 2 per hostname, IE8 to 6.
 
 
-[screenshot_chrome_waterfall]: /images/static/2012-06/chrome-waterfall.gif
-[screenshot_webpagetest_waterfall]: /images/static/2012-06/webpagetest-waterfall.gif
+[screenshot_chrome_waterfall]: /images/2012-06/chrome-waterfall.gif
+[screenshot_webpagetest_waterfall]: /images/2012-06/webpagetest-waterfall.gif

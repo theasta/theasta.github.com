@@ -308,9 +308,9 @@ _Nota Bene: The andika.js is an external JavaScript file (http://use.edgefonts.n
 [amd_api]: https://github.com/amdjs/amdjs-api/wiki/AMD
 [nodecellar]: http://nodecellar.coenraets.org/
 [nodecellar_github]: https://github.com/ccoenraets/nodecellar
-[nodecellar_screenshot]: /images/static/2013-02/nodecellar_homepage.jpg
-[network_initial_screenshot]: /images/static/2013-02/nodecellar_network_initial.gif
-[network_final_screenshot]: /images/static/2013-02/nodecellar_network_final.gif
+[nodecellar_screenshot]: /images/2013-02/nodecellar_homepage.jpg
+[network_initial_screenshot]: /images/2013-02/nodecellar_network_initial.gif
+[network_final_screenshot]: /images/2013-02/nodecellar_network_final.gif
 [nodecellar_fork]: https://github.com/theasta/nodecellar-requirejs
 [commit_commonjs]: https://github.com/theasta/nodecellar-requirejs/blob/f34ed6dec31a70c17895eb94c86ea8813f1812a6/public/js/common.js
 [commit_templates]: https://github.com/theasta/nodecellar-requirejs/commit/74351404c99075f12dbbfd0fdd6163ad41cb6460

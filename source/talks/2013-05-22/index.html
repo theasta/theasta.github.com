@@ -54,13 +54,13 @@ layout: false
 
                 <section>
                     <h2>Static assets ?</h2>
-                    <img src="http://static.theasta.net/images/2013-05-22/icons_file_type.jpg">
+                    <img src="/images/2013-05-22/icons_file_type.jpg">
                 </section>
 
 
                     <section>
                         <h2>Why do we need to version static assets&nbsp;?</h2>
-                        <p class="fragment"><img src="http://static.theasta.net/images/2013-05-22/high-performance-web-sites.jpg"></p>
+                        <p class="fragment"><img src="/images/2013-05-22/high-performance-web-sites.jpg"></p>
                     </section>
 
                     <section>
@@ -111,7 +111,7 @@ layout: false
                             <li><code>Last-Modified / If-Modified-Since</code></li>
                             <li><code>Etag / If-None-Match</code></li>
                         </ul>
-                            <img src="http://static.theasta.net/images/2013-05-22/http_validation_model.png">
+                            <img src="/images/2013-05-22/http_validation_model.png">
                     </section>
                     <!--<section>-->
                         <!--<h3>HTTP Validation Model</h3>-->
@@ -138,8 +138,8 @@ layout: false
 
                     <section>
                         <h3>When I say no request, I mean it !</h3>
-                        <img src="http://static.theasta.net/images/2013-05-22/maurice_day_1.jpg"/>
-                        <img class="fragment" src="http://static.theasta.net/images/2013-05-22/maurice_day_18.jpg"/>
+                        <img src="/images/2013-05-22/maurice_day_1.jpg"/>
+                        <img class="fragment" src="/images/2013-05-22/maurice_day_18.jpg"/>
                     </section>
 
 				<section>
@@ -162,7 +162,7 @@ layout: false
                     <section>
                         <h2>Versioning By Release Number</h2>
                         <p style="margin-top:1em;color: red;">Continuous deployment + per-release assets versioning = bad match !!</p>
-                        <img src="http://static.theasta.net/images/2013-05-22/no_changes.gif"/>
+                        <img src="/images/2013-05-22/no_changes.gif"/>
                         <aside class="notes">
                         <p>Everytime we release :</p>
                         <ul>
@@ -175,7 +175,7 @@ layout: false
 
                     <section>
                         <h2>Version Static Assets on a per-file basis</h2>
-                        <img src="http://static.theasta.net/images/2013-05-22/per-file.png"/>
+                        <img src="/images/2013-05-22/per-file.png"/>
                     </section>
 
                 <section>
@@ -205,7 +205,7 @@ layout: false
                 <section>
                     <h2>Deployment</h2>
                     <h3>Grunt</h3>
-                    <img src="http://static.theasta.net/images/2013-05-22/grunt.png">
+                    <img src="/images/2013-05-22/grunt.png">
                     <p>A JavaScript task runner built on top of Node.js</p>
                     <aside class="notes">
                     <ul>
@@ -237,7 +237,7 @@ module.exports = function(grunt) {
 
                 <section>
                     <h2>Task Configuration - Files</h2>
-                    <img src="http://static.theasta.net/images/2013-05-22/grunt_files.gif"/>
+                    <img src="/images/2013-05-22/grunt_files.gif"/>
                 </section>
                 <section>
                     <h2>Step 1: Write a deployment script - js</h2>
@@ -311,7 +311,7 @@ grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
 
                 <section>
                     <h2>Declarative Syntax !!</h2>
-                    <img src="http://static.theasta.net/images/2013-05-22/grunt_files_question_mark.gif"/>
+                    <img src="/images/2013-05-22/grunt_files_question_mark.gif"/>
                     <aside class="notes">
                     <ul>
                         <li>The GruntFile uses a declarative syntax to define source-destination file mapping</li>
@@ -330,7 +330,7 @@ grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
 
                 <section>
                     <h2>Solution: An assets-versioning plugin</h2>
-                    <img src="http://static.theasta.net/images/2013-05-22/grunt_plugin.gif" />
+                    <img src="/images/2013-05-22/grunt_plugin.gif" />
                     <aside class="notes">
                     <ul>
                         <li>refer to a previously registered task <i>(uglify:home, cssmin:main, ...)</i></li>
