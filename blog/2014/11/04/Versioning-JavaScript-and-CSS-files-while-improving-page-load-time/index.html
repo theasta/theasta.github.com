@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <title>Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost | Theasta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The grunt-assets-versioning plu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost">
+<meta property="og:url" content="http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/index.html">
+<meta property="og:site_name" content="Theasta">
+<meta property="og:description" content="td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The grunt-assets-versioning plu">
+<meta property="og:updated_time" content="2014-11-23T21:34:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost">
+<meta name="twitter:description" content="td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The grunt-assets-versioning plu">
+  
+  <link rel="alternative" href="/atom.xml" title="Theasta" type="application/atom+xml">
+  
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24159514-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+<body   >
+<header role="banner"><hgroup>
+  <h1><a href="http://www.theasta.net/">Theasta</a></h1>
+  
+  <h2>Techniques of The Professional PixPocket</h2>
+  
+</hgroup></header>
+<nav role="navigation">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+</ul>
+
+
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:http://www.theasta.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+
+<ul class="main-navigation">
+  
+  <li><a href="/">Blog</a></li>
+  
+  <li><a href="/blog/archives">Archives</a></li>
+  
+  <li><a href="/talks/">Talks</a></li>
+  
+</ul></nav>
+<div id="main">
+  <div id="content">
+    <div>
+  <article class="hentry" role="article">
+      <header>
+    <h1 class="entry-title">
+      
+        Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost
+      
+    </h1>
+    <p class="meta">
+      <time datetime="2014-11-05T04:10:23.000Z">Nov 4 2014</time>
+
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+      <blockquote>
+<p>td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The <a href="https://github.com/theasta/grunt-assets-versioning" target="_blank" rel="external">grunt-assets-versioning plugin</a> plugin will automatically handle the process for you and put up a map of version tags than you can easily integrate into your back-end stack.</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Why_do_we_need_to_version_static_assets_in_the_first_place_3F"><a href="#Why_do_we_need_to_version_static_assets_in_the_first_place_3F" class="headerlink" title="Why do we need to version static assets in the first place?"></a>Why do we need to version static assets in the first place?</h2><p>Static assets are the application’s static resources like JavaScript files, CSS files, images, fonts…</p>
+<p>When a user visits your homepage for the first time, she has to download all the images, css and js files used by this page. Then when she goes to your sign-in page, if the JavaScript file you are using on that page is identical, she shouldn’t have to re-download it since it is present in the browser cache. This is the main tenet of web performance : <strong>make fewer http requests</strong>.</p>
+<p>For static assets, this is achieved by setting up an expires header for each file:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Expires:Fri, 13 Oct 2034 05:00:00 GMT</span><br></pre></td></tr></table></figure>
+<p>The header above means that, as long as the file is in the cache, the browser won’t make any request to the server for that specific file for the next 20 years.</p>
+<p>Great but as a website evolves, the codebase also grows. Files will be added, removed, modified. Every time you roll out a release, you need to ensure your users will get their latest versions.</p>
+<p>This is why you need to add to your assets a tag that will act like a cache buster. There are several ways to do so:</p>
+<ol>
+<li>Query string parameter: /js/main.js<strong>?v=1.2.0</strong></li>
+<li>Folder: <strong>/1.2.0</strong>/js/main.js</li>
+<li>File name: /js/main<strong>.1.2.0</strong>.js</li>
+</ol>
+<h2 id="The_most_effective_cache-busting_technique_is_not_the_easiest_to_implement_in_the_back-end"><a href="#The_most_effective_cache-busting_technique_is_not_the_easiest_to_implement_in_the_back-end" class="headerlink" title="The most effective cache-busting technique is not the easiest to implement in the back-end"></a>The most effective cache-busting technique is not the easiest to implement in the back-end</h2><p>All the major frameworks offer a way to handle static assets. For example, Symfony2 uses the <a href="http://symfony.com/doc/current/cookbook/assetic/asset_management.html" target="_blank" rel="external">Assetic bundle for asset management</a> . The Play Framework provides an <a href="https://www.playframework.com/documentation/2.0/Assets" target="_blank" rel="external">Asset Controller</a>.</p>
+<p>By default, they handle versioning by appending a version hash (as a folder or a query string parameter) that matches the release version.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script src=&#34;/&#123;VERSION_TAG&#125;/js/main.js&#34;&#62;&#60;/script&#62;&#10;&#60;img src=&#34;/&#123;VERSION_TAG&#125;/images/logo.png&#34; alt=&#34;my logo&#34;&#62;</span><br></pre></td></tr></table></figure>
+<p>The plus side of such an approach is that it is pretty straightforward to implement. The asset controller function only needs to know one version tag, that is also the release version tag, and is common to all resources at a point of time.</p>
+<p>The downside is: Everytime you do a release, you need to upload all your static assets back to your CDN or host, <strong>whether they have changed or not</strong>. Subsequently your users have to re-download resources even if they are exactly the same.<br>It will <strong>cost you more money</strong> and hurt your web performance.</p>
+<p>The solution is to implement a per-asset strategy.</p>
+<p>Let’s see how Symfony2 lets you do it:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script src=&#34;&#123;&#123; asset(&#39;js/main.js&#39;, version=&#39;5.0&#39;)) &#125; &#125;&#34;&#62;&#60;/script&#62;&#10;&#60;img src=&#34;&#123;&#123; asset(&#39;images/logo.png&#39;, version=&#39;3.0&#39;) &#125; &#125;&#34; alt=&#34;my logo&#34; /&#62;</span><br></pre></td></tr></table></figure>
+<p>That makes completely sense but since it’s hardcoded, it means you need to update every single asset version manually. This is not maintainable and needs to be automated.</p>
+<p>It is quite easy to write a wrapper around any asset controller out there and use a simple dictionary to look up for the current versioned path of the resource file you are targetting.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;&#34;js/main.js&#34;: &#34;js/main.5.0.js&#34;,&#10;&#34;images/logo.png&#34;: &#34;images/logo.3.0.png&#34;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>The missing piece now is to have the static assets deployment generate that version map for you.</p>
+<h2 id="Introducing_the_grunt-assets-versioning_plugin"><a href="#Introducing_the_grunt-assets-versioning_plugin" class="headerlink" title="Introducing the grunt-assets-versioning plugin"></a>Introducing the grunt-assets-versioning plugin</h2><p>Grunt is a JavaScript task runner. It is very popular and a lot of people are using to deploy your static assets. There are many open-source and well-tested plugins that will let you perform all the necessary steps: bundling, minifying, compressing, sending to a CDN…</p>
+<p>The mandate of the grunt-assets-versioning plugin is not only to version your static assets but also to output a version tag mapping you can consume in your back-end assets controller.</p>
+<p>There are many options, you can for example use a hash tag (recommended) or a date tag, choose the format or the length of the tag, etc…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assets_versioning: &#123;&#10;    deployment: &#123;&#10;        options: &#123;&#10;            versionsMapFile: &#39;assets.json&#39;&#10;        &#125;,&#10;        files: &#123; &#10;            &#39;js/main.js&#39;: [ &#39;src/js/file1.js&#39;, &#39;src/js/file2.js&#39;],&#10;            &#39;images/logo.png&#39;: [&#39;src/images/logo.png&#39;]&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>The task will create two files:</p>
+<ul>
+<li>js/main.xxxxxxxxx.js</li>
+<li>images/logo.yyyyyyyy.png</li>
+</ul>
+<p>and generate a json file with all the mapping information you will need:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">	&#123; "<span class="attribute">originalPath</span>": <span class="value"><span class="string">"js/main.js"</span></span>, "<span class="attribute">versionedPath</span>": <span class="value"><span class="string">"js/main.xxxxxxxxx.js"</span></span>, "<span class="attribute">version</span>": <span class="value"><span class="string">"xxxxxxxxx"</span> </span>&#125;,</span><br><span class="line">	&#123; "<span class="attribute">originalPath</span>": <span class="value"><span class="string">"images/logo.png"</span></span>, "<span class="attribute">versionedPath</span>": <span class="value"><span class="string">"images/logo.yyyyyyyy.png"</span></span>, "<span class="attribute">version</span>": <span class="value"><span class="string">"yyyyyyyy"</span> </span>&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="How_to_customize_the_version_map_file"><a href="#How_to_customize_the_version_map_file" class="headerlink" title="How to customize the version map file"></a>How to customize the version map file</h2><p>If the map format above doesn’t suit your needs or if you prefer to create for example a php file containing an array of files so you don’t have to request and parse the json file every single time you are using your asset controller wrapper, you can pass a template file to the grunt assets versioning so that it generates exactly the file you will be needing.</p>
+<p>For example you can use this template:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;class StaticAssets&#10;&#123;&#10;  public static $dict = array(&#10;&#60;% _.forEach(files, function(file) &#123; %&#62;&#10;    &#34;&#60;%= file.originalPath %&#62;&#34; =&#62; &#34;&#60;%= file.versionedPath %&#62;&#34;,&#10;&#60;% &#125;); %&#62;&#10;  );&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>and the grunt assets versioning plugin will generate this file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaticAssets</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="variable">$dict</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">"js/main.js"</span> =&gt; <span class="string">"js/main.xxxxxxxxx.js"</span>,</span><br><span class="line">    <span class="string">"images/logo.png"</span> =&gt; <span class="string">"images/logo.yyyyyyyy.png"</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In order to do this, you will need to pass the path to the template using the versionsMapTemplate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assets_versioning: &#123;&#10;&#9;deployment: &#123;&#10;&#9;&#9;options: &#123;&#10;&#9;&#9;&#9;versionsMapFile: &#39;assets.php&#39;,&#10;&#9;&#9;&#9;versionsMapTemplate: &#39;assets.php.tpl&#39;&#10;&#9;&#9;&#125;,&#10;&#9;&#9;files: &#123; &#10;&#9;&#9;&#9;&#39;js/main.js&#39;: [ &#39;src/js/file1.js&#39;, &#39;src/js/file2.js&#39;],&#10;&#9;&#9;&#9;&#39;images/logo.png&#39;: [&#39;src/images/logo.png&#39;]&#10;&#9;&#9;&#125;&#10;&#9;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>Whatever programming language you are using, you can easily output a version tag dictionary that will meet your requirements and can be consumed by your backend controllers to retrieve the versioned path to your static assets.</p>
+
+    
+  </div>
+  
+
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"></div>
+  </section>
+  
+</div>
+<aside class="sidebar">
+  
+  
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+    <li class="post">
+      <a href="/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/">Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2014/07/13/vagrant-nodejs-dev-environment/">A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2013/02/11/adding-requirejs-to-nodecellar/">Adding RequireJs to NodeCellar</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/24/external-stylesheets-and-web-performance/">External Stylesheets and Web Performance</a>
+    </li>
+    
+    <li class="post">
+      <a href="/blog/2012/06/23/three-key-moments-web-performance/">Three Key Moments to keep in mind when dealing with page load performance</a>
+    </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+  </div>
+</div>
+<footer role="contentinfo">
+  <p>
+    Copyright &copy; 2016 Theasta<br>
+    <span class="credit">Powered by <a href="http://hexo.io/">Hexo</a> - Octopress classic theme</span>
+  </p>
+</footer>
+
+<script>
+  var disqus_shortname = 'theastaoctopress';
+  
+  var disqus_url = 'http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script src="/js/script.js" type="text/javascript"></script>
+</body>
+</html>

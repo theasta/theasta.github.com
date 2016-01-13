@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Theasta]]></title>
+  <subtitle><![CDATA[Techniques of The Professional PixPocket]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://www.theasta.net/"/>
+  <updated>2014-11-23T21:34:01.000Z</updated>
+  <id>http://www.theasta.net/</id>
+  
+  <author>
+    <name><![CDATA[Theasta]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost]]></title>
+    <link href="http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/"/>
+    <id>http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/</id>
+    <published>2014-11-05T04:10:23.000Z</published>
+    <updated>2014-11-23T21:34:01.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The <a href="https://github.com/theasta/grunt-assets-versioning" target="_blank" rel="external">grunt-assets-versioning plugin</a> plugin will automatically handle the process for you and put up a map of version tags than you can easily integrate into your back-end stack.</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Why_do_we_need_to_version_static_assets_in_the_first_place_3F"><a href="#Why_do_we_need_to_version_static_assets_in_the_first_place_3F" class="headerlink" title="Why do we need to version static assets in the first place?"></a>Why do we need to version static assets in the first place?</h2><p>Static assets are the application’s static resources like JavaScript files, CSS files, images, fonts…</p>
+<p>When a user visits your homepage for the first time, she has to download all the images, css and js files used by this page. Then when she goes to your sign-in page, if the JavaScript file you are using on that page is identical, she shouldn’t have to re-download it since it is present in the browser cache. This is the main tenet of web performance : <strong>make fewer http requests</strong>.</p>
+<p>For static assets, this is achieved by setting up an expires header for each file:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Expires:Fri, 13 Oct 2034 05:00:00 GMT</span><br></pre></td></tr></table></figure>
+<p>The header above means that, as long as the file is in the cache, the browser won’t make any request to the server for that specific file for the next 20 years.</p>
+<p>Great but as a website evolves, the codebase also grows. Files will be added, removed, modified. Every time you roll out a release, you need to ensure your users will get their latest versions.</p>
+<p>This is why you need to add to your assets a tag that will act like a cache buster. There are several ways to do so:</p>
+<ol>
+<li>Query string parameter: /js/main.js<strong>?v=1.2.0</strong></li>
+<li>Folder: <strong>/1.2.0</strong>/js/main.js</li>
+<li>File name: /js/main<strong>.1.2.0</strong>.js</li>
+</ol>
+<h2 id="The_most_effective_cache-busting_technique_is_not_the_easiest_to_implement_in_the_back-end"><a href="#The_most_effective_cache-busting_technique_is_not_the_easiest_to_implement_in_the_back-end" class="headerlink" title="The most effective cache-busting technique is not the easiest to implement in the back-end"></a>The most effective cache-busting technique is not the easiest to implement in the back-end</h2><p>All the major frameworks offer a way to handle static assets. For example, Symfony2 uses the <a href="http://symfony.com/doc/current/cookbook/assetic/asset_management.html" target="_blank" rel="external">Assetic bundle for asset management</a> . The Play Framework provides an <a href="https://www.playframework.com/documentation/2.0/Assets" target="_blank" rel="external">Asset Controller</a>.</p>
+<p>By default, they handle versioning by appending a version hash (as a folder or a query string parameter) that matches the release version.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script src=&#34;/&#123;VERSION_TAG&#125;/js/main.js&#34;&#62;&#60;/script&#62;&#10;&#60;img src=&#34;/&#123;VERSION_TAG&#125;/images/logo.png&#34; alt=&#34;my logo&#34;&#62;</span><br></pre></td></tr></table></figure>
+<p>The plus side of such an approach is that it is pretty straightforward to implement. The asset controller function only needs to know one version tag, that is also the release version tag, and is common to all resources at a point of time.</p>
+<p>The downside is: Everytime you do a release, you need to upload all your static assets back to your CDN or host, <strong>whether they have changed or not</strong>. Subsequently your users have to re-download resources even if they are exactly the same.<br>It will <strong>cost you more money</strong> and hurt your web performance.</p>
+<p>The solution is to implement a per-asset strategy.</p>
+<p>Let’s see how Symfony2 lets you do it:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script src=&#34;&#123;&#123; asset(&#39;js/main.js&#39;, version=&#39;5.0&#39;)) &#125; &#125;&#34;&#62;&#60;/script&#62;&#10;&#60;img src=&#34;&#123;&#123; asset(&#39;images/logo.png&#39;, version=&#39;3.0&#39;) &#125; &#125;&#34; alt=&#34;my logo&#34; /&#62;</span><br></pre></td></tr></table></figure>
+<p>That makes completely sense but since it’s hardcoded, it means you need to update every single asset version manually. This is not maintainable and needs to be automated.</p>
+<p>It is quite easy to write a wrapper around any asset controller out there and use a simple dictionary to look up for the current versioned path of the resource file you are targetting.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;&#34;js/main.js&#34;: &#34;js/main.5.0.js&#34;,&#10;&#34;images/logo.png&#34;: &#34;images/logo.3.0.png&#34;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>The missing piece now is to have the static assets deployment generate that version map for you.</p>
+<h2 id="Introducing_the_grunt-assets-versioning_plugin"><a href="#Introducing_the_grunt-assets-versioning_plugin" class="headerlink" title="Introducing the grunt-assets-versioning plugin"></a>Introducing the grunt-assets-versioning plugin</h2><p>Grunt is a JavaScript task runner. It is very popular and a lot of people are using to deploy your static assets. There are many open-source and well-tested plugins that will let you perform all the necessary steps: bundling, minifying, compressing, sending to a CDN…</p>
+<p>The mandate of the grunt-assets-versioning plugin is not only to version your static assets but also to output a version tag mapping you can consume in your back-end assets controller.</p>
+<p>There are many options, you can for example use a hash tag (recommended) or a date tag, choose the format or the length of the tag, etc…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assets_versioning: &#123;&#10;    deployment: &#123;&#10;        options: &#123;&#10;            versionsMapFile: &#39;assets.json&#39;&#10;        &#125;,&#10;        files: &#123; &#10;            &#39;js/main.js&#39;: [ &#39;src/js/file1.js&#39;, &#39;src/js/file2.js&#39;],&#10;            &#39;images/logo.png&#39;: [&#39;src/images/logo.png&#39;]&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>The task will create two files:</p>
+<ul>
+<li>js/main.xxxxxxxxx.js</li>
+<li>images/logo.yyyyyyyy.png</li>
+</ul>
+<p>and generate a json file with all the mapping information you will need:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">	&#123; "<span class="attribute">originalPath</span>": <span class="value"><span class="string">"js/main.js"</span></span>, "<span class="attribute">versionedPath</span>": <span class="value"><span class="string">"js/main.xxxxxxxxx.js"</span></span>, "<span class="attribute">version</span>": <span class="value"><span class="string">"xxxxxxxxx"</span> </span>&#125;,</span><br><span class="line">	&#123; "<span class="attribute">originalPath</span>": <span class="value"><span class="string">"images/logo.png"</span></span>, "<span class="attribute">versionedPath</span>": <span class="value"><span class="string">"images/logo.yyyyyyyy.png"</span></span>, "<span class="attribute">version</span>": <span class="value"><span class="string">"yyyyyyyy"</span> </span>&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="How_to_customize_the_version_map_file"><a href="#How_to_customize_the_version_map_file" class="headerlink" title="How to customize the version map file"></a>How to customize the version map file</h2><p>If the map format above doesn’t suit your needs or if you prefer to create for example a php file containing an array of files so you don’t have to request and parse the json file every single time you are using your asset controller wrapper, you can pass a template file to the grunt assets versioning so that it generates exactly the file you will be needing.</p>
+<p>For example you can use this template:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?php&#10;class StaticAssets&#10;&#123;&#10;  public static $dict = array(&#10;&#60;% _.forEach(files, function(file) &#123; %&#62;&#10;    &#34;&#60;%= file.originalPath %&#62;&#34; =&#62; &#34;&#60;%= file.versionedPath %&#62;&#34;,&#10;&#60;% &#125;); %&#62;&#10;  );&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>and the grunt assets versioning plugin will generate this file:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaticAssets</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="variable">$dict</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">"js/main.js"</span> =&gt; <span class="string">"js/main.xxxxxxxxx.js"</span>,</span><br><span class="line">    <span class="string">"images/logo.png"</span> =&gt; <span class="string">"images/logo.yyyyyyyy.png"</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In order to do this, you will need to pass the path to the template using the versionsMapTemplate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assets_versioning: &#123;&#10;&#9;deployment: &#123;&#10;&#9;&#9;options: &#123;&#10;&#9;&#9;&#9;versionsMapFile: &#39;assets.php&#39;,&#10;&#9;&#9;&#9;versionsMapTemplate: &#39;assets.php.tpl&#39;&#10;&#9;&#9;&#125;,&#10;&#9;&#9;files: &#123; &#10;&#9;&#9;&#9;&#39;js/main.js&#39;: [ &#39;src/js/file1.js&#39;, &#39;src/js/file2.js&#39;],&#10;&#9;&#9;&#9;&#39;images/logo.png&#39;: [&#39;src/images/logo.png&#39;]&#10;&#9;&#9;&#125;&#10;&#9;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>Whatever programming language you are using, you can easily output a version tag dictionary that will meet your requirements and can be consumed by your backend controllers to retrieve the versioned path to your static assets.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>td;lr: The most efficient asset pipeline strategy both in terms of cost-cutting and performance-boosting is to version your files on an asset basis and not per release. The <a href="https://github.com/theasta/grunt-assets-versioning">grunt-assets-versioning plugin</a> plugin will automatically handle the process for you and put up a map of version tags than you can easily integrate into your back-end stack.</p>
+</blockquote>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[A NodeJS, MongoDB and Redis dev environment with Vagrant and Ansible]]></title>
+    <link href="http://www.theasta.net/blog/2014/07/13/vagrant-nodejs-dev-environment/"/>
+    <id>http://www.theasta.net/blog/2014/07/13/vagrant-nodejs-dev-environment/</id>
+    <published>2014-07-13T23:59:13.000Z</published>
+    <updated>2014-11-23T21:49:48.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>tl;dr: Kick-start your nodejs/nginx/mongodb/redis application development within minutes with the <a href="https://github.com/theasta/vagrant-nodejs-dev" target="_blank" rel="external">vagrant-nodejs-dev virtual machine</a>.</p>
+</blockquote>
+<p>When I want to give a crack at a new library or try out an idea, I almost always use the same tech stack for the backend: </p>
+<ul>
+<li>Nginx to serve static assets</li>
+<li>NodeJS to create an api</li>
+<li>MongoDB to store data</li>
+<li>Redis to manage sessions</li>
+</ul>
+<p>To get started quickly, I use a tailor-made virtual machine. I can boot from anywhere as long as I have the following installed:</p>
+<ul>
+<li><a href="https://www.virtualbox.org/" target="_blank" rel="external">Virtual Box</a> - version 4.3.8+</li>
+<li><a href="http://www.vagrantup.com/" target="_blank" rel="external">Vagrant</a> - version 1.5.0+</li>
+<li><a href="http://docs.ansible.com/intro_installation.html" target="_blank" rel="external">Ansible</a> - version 1.5.2+<a id="more"></a>
+</li>
+</ul>
+<p>To use this virtual machine, follow the next steps:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-galaxy install DavidWittman.redis&#10;git clone https://github.com/theasta/vagrant-nodejs-dev.git&#10;cd vagrant-nodejs-dev&#10;vagrant up</span><br></pre></td></tr></table></figure>
+<p>You now have an Ubuntu machine running with nginx, mongodb, nodejs and redis pre-installed.</p>
+<h2 id="Getting_your_nodejs_app_to_run_on_the_virtual_machine"><a href="#Getting_your_nodejs_app_to_run_on_the_virtual_machine" class="headerlink" title="Getting your nodejs app to run on the virtual machine"></a>Getting your nodejs app to run on the virtual machine</h2><p>The ansible-nodejs-apps playbook included in the repo will hugely simplify the process.</p>
+<p>To boot an app, the playbook relies on:</p>
+<ul>
+<li>a package.json file</li>
+<li>a server.js file</li>
+</ul>
+<p>If ever you are not using server.js as your primary file, you should update the “script” object with the proper information.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;scripts&#34;: &#123;&#34;start&#34;: &#34;node myApp.js&#34;&#125;</span><br></pre></td></tr></table></figure>
+<p>Then, there are two different ways to fire your app.</p>
+<h3 id="Put_your_source_code_alongside_the_Vagrantfile_and_ansible-playbooks"><a href="#Put_your_source_code_alongside_the_Vagrantfile_and_ansible-playbooks" class="headerlink" title="Put your source code alongside the Vagrantfile and ansible-playbooks"></a>Put your source code alongside the Vagrantfile and ansible-playbooks</h3><p>This is the easiest way: if you have your app at the root of the repo, you have nothing to do than to have, it will get automatically booted.</p>
+<p>If your app is listening to port 3000, you can access it at “<a href="http://192.168.50.3:3000" target="_blank" rel="external">http://192.168.50.3:3000</a>“ (The network ip is set in Vagrantfile, you can modify if necessary).</p>
+<h3 id="Symlink_your_applications"><a href="#Symlink_your_applications" class="headerlink" title="Symlink your applications"></a>Symlink your applications</h3><p>You can create a vagrant sync folder that links to your local working directory.  This way, any changes you make locally is also on the vm right away.</p>
+<p>This configuration has the tremendous advantage of letting you have multiple apps running on a single virtual machine (as long as they are using different ports).</p>
+<p>Add this line in the Vagrantfile:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.vm.synced_folder &#34;/local/path/to/myapp&#34;, &#34;/srv/myapp&#34;&#10;config.vm.synced_folder &#34;/local/path/to/anotherapp&#34;, &#34;/srv/anotherapp&#34;</span><br></pre></td></tr></table></figure>
+<p>Now you need to list the apps you want to enable by listing them in ansible-playbooks/main.yml:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- role: ansible-nodejs-apps&#10;  apps:&#10;    enabled:&#10;      - &#34;/srv/myapp/&#34;&#10;      - &#34;/srv/anotherapp/&#34;</span><br></pre></td></tr></table></figure>
+<p>Then <code>vagrant reload --provision</code> and you’re all good.</p>
+<h2 id="Docker_3F"><a href="#Docker_3F" class="headerlink" title="Docker?"></a>Docker?</h2><p>I would be curious to know if a docker image based on this vagrant configuration would make it even more straightforward. I would be stoked to hear from you if you have any insights on that matter.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>tl;dr: Kick-start your nodejs/nginx/mongodb/redis application development within minutes with the <a href="https://github.com/theasta/vagrant-nodejs-dev">vagrant-nodejs-dev virtual machine</a>.</p>
+</blockquote>
+<p>When I want to give a crack at a new library or try out an idea, I almost always use the same tech stack for the backend: </p>
+<ul>
+<li>Nginx to serve static assets</li>
+<li>NodeJS to create an api</li>
+<li>MongoDB to store data</li>
+<li>Redis to manage sessions</li>
+</ul>
+<p>To get started quickly, I use a tailor-made virtual machine. I can boot from anywhere as long as I have the following installed:</p>
+<ul>
+<li><a href="https://www.virtualbox.org/">Virtual Box</a> - version 4.3.8+</li>
+<li><a href="http://www.vagrantup.com/">Vagrant</a> - version 1.5.0+</li>
+<li><a href="http://docs.ansible.com/intro_installation.html">Ansible</a> - version 1.5.2+]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Adding RequireJs to NodeCellar]]></title>
+    <link href="http://www.theasta.net/blog/2013/02/11/adding-requirejs-to-nodecellar/"/>
+    <id>http://www.theasta.net/blog/2013/02/11/adding-requirejs-to-nodecellar/</id>
+    <published>2013-02-11T18:19:00.000Z</published>
+    <updated>2016-01-13T06:25:48.000Z</updated>
+    <content type="html"><![CDATA[<p><a href="http://nodecellar.coenraets.org/" target="_blank" rel="external">Nodecellar</a> is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. <a href="https://github.com/ccoenraets/nodecellar" target="_blank" rel="external">The source code</a> was made available on Github by its author, Christophe Coenraets, so everyone can dig into it and learn how to use those brilliant libraries and tools.</p>
+<p>However, it felt like a key player was forgotten on the invite list : <a href="http://requirejs.org/" target="_blank" rel="external">RequireJs</a>, the infamous javascript file loader. Since I was curious to know how difficult it could be to add RequireJs to an existing application and turn all its javascript code into modules, I decided to take a crack at it and to record the process by committing each step on my <a href="https://github.com/theasta/nodecellar-requirejs" target="_blank" rel="external">nodecellar fork</a> on Github.</p>
+<a id="more"></a>
+<h2 id="Why_am_I_doing_this_in_the_first_place__3F"><a href="#Why_am_I_doing_this_in_the_first_place__3F" class="headerlink" title="Why am I doing this in the first place ?"></a>Why am I doing this in the first place ?</h2><p>RequireJs has three positive impacts when used to its full potential. It improves :</p>
+<ul>
+<li>web performance</li>
+<li>quality of code</li>
+<li>CI and ease of deployment</li>
+</ul>
+<h3 id="Web_Performance_Optimization"><a href="#Web_Performance_Optimization" class="headerlink" title="Web Performance Optimization"></a>Web Performance Optimization</h3><p>Let’s navigate the <a href="http://nodecellar.coenraets.org/" target="_blank" rel="external">nodecellar website</a> and have a look at the network panel:</p>
+<p><img src="/images/2013-02/nodecellar_network_initial.gif" alt="Network Panel"></p>
+<p>A bunch of js files and templates are loaded though most of them are not needed right away, they are relevant to other pages, like the about section, the user may never navigate to.</p>
+<h3 id="Number_One_Rule_in_Web_Performance__3A_Make_less_HTTP_requests"><a href="#Number_One_Rule_in_Web_Performance__3A_Make_less_HTTP_requests" class="headerlink" title="Number One Rule in Web Performance : Make less HTTP requests"></a>Number One Rule in Web Performance : Make less HTTP requests</h3><p>We could easily improve the browser display speed by combining the scripts together. It could be one big file containing all the code needed by the application, or several files organized by sections of content.</p>
+<p>RequireJs provides an optimization tool that will help us to do so.</p>
+<p>Here’s the structure I opted for :</p>
+<ul>
+<li>a base javascript file with all the shared libraries (jquery, underscore, backbone, …)</li>
+<li>a javascript file by main sections<ul>
+<li>home.js</li>
+<li>list.js</li>
+<li>about.js</li>
+<li>addview.js</li>
+</ul>
+</li>
+</ul>
+<p>To achieve this goal, it’s important to have a clear view of file dependencies. Unfortunately, JavaScript doesn’t provide any kind of include mechanism. RequireJs does via its <a href="https://github.com/amdjs/amdjs-api/wiki/AMD" target="_blank" rel="external">Asynchronous Module Definition (AMD) API</a>.</p>
+<h3 id="Quality_of_Code__26amp_3B_Modules"><a href="#Quality_of_Code__26amp_3B_Modules" class="headerlink" title="Quality of Code &amp; Modules"></a>Quality of Code &amp; Modules</h3><p>RequireJs provides a way to define and require modules.<br>Each module lives on its own and lists its dependencies.</p>
+<p>There are several advantages to this approach :</p>
+<ul>
+<li>it avoids polluting the global namespace</li>
+<li>it ensures loose-coupling</li>
+</ul>
+<p>Let’s get to the meat and write some code.</p>
+<h2 id="Removing_script_tags"><a href="#Removing_script_tags" class="headerlink" title="Removing script tags"></a>Removing script tags</h2><p>First of all, we’re going to remove all the script tags from the index.html and replace them with the following snippet :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;script data-main=&#34;js/common&#34; src=&#34;js/lib/require.js&#34;&#62;&#60;/script&#62;</span><br></pre></td></tr></table></figure>
+<p>This script tag is going to load the require.js library. Once this file is loaded, parsed and executed, it’s going to request asynchronously the file specified by the data-main attribute. It is a usual practice to name that file main.js but in this case this filename was already taken.</p>
+<p>This common.js file will serve as our base file and will have several purposes :</p>
+<ul>
+<li>require all other files we removed from the html page</li>
+<li>bootstrap the application.</li>
+</ul>
+<h2 id="Require_all_js_files_from_common-js"><a href="#Require_all_js_files_from_common-js" class="headerlink" title="Require all js files from common.js"></a>Require all js files from common.js</h2><p>Let’s require first the main libraries :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(</span><br><span class="line">    [</span><br><span class="line">        <span class="string">'js/lib/jquery-1.8.2.min.js'</span>,</span><br><span class="line">        <span class="string">'js/lib/underscore-min.js'</span>,</span><br><span class="line">        <span class="string">'js/lib/backbone-min.js'</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// bootstrap code</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>If you do so, you will likely end up with this occasional error : <em>‘Module name “underscore” has not been loaded yet for context: _. Use require([])’</em>.<br>It happens because RequireJs loads scripts asynchronously and <strong>out of order</strong>.<br>Since Backbone depends on Underscore, if ever it is loaded and executed first, an error will be thrown.</p>
+<p>To fix this error :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    shim: &#123;</span><br><span class="line">        <span class="string">'js/lib/backbone-min.js'</span>: &#123;</span><br><span class="line">            deps: [<span class="string">'js/lib/underscore-min.js'</span>, <span class="string">'js/lib/jquery-1.8.2.min.js'</span>],</span><br><span class="line">            exports: <span class="string">'Backbone'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The shim object allows us to declare dependencies for “traditional” JavaScript files and define which variable we would ultimately like to export. It’s a baby step towards writing modular code without needing any kind of refactoring.</p>
+<p>Now it’s time to make our life easier and stop using long filenames everytime we want to refer to a script. Strings don’t get minified so it’s better to shorten them if used repeatdly.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        <span class="string">'jquery'</span>: <span class="string">'lib/jquery-1.8.2.min'</span>,</span><br><span class="line">        <span class="string">'underscore'</span>: <span class="string">'lib/underscore-min'</span>,</span><br><span class="line">        <span class="string">'backbone'</span>: <span class="string">'lib/backbone-min'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    shim: &#123;</span><br><span class="line">        <span class="string">'backbone'</span>: &#123;</span><br><span class="line">            deps: [<span class="string">'underscore'</span>, <span class="string">'jquery'</span>],</span><br><span class="line">            exports: <span class="string">'Backbone'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">require</span>([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// bootstrap code</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Here’s how <a href="https://github.com/theasta/nodecellar-requirejs/blob/f34ed6dec31a70c17895eb94c86ea8813f1812a6/public/js/common.js" target="_blank" rel="external">common.js looks like</a> at the end of that step.</p>
+<h3 id="Moving_the_bootstrap_code_into_the_require_callback"><a href="#Moving_the_bootstrap_code_into_the_require_callback" class="headerlink" title="Moving the bootstrap code into the require callback"></a>Moving the bootstrap code into the require callback</h3><p>The second argument of the require function is an anonymous function that will be triggered as soon as all the js files are loaded and executed. This is the perfect place to bootstrap the application.<br>In its original form, NodeCellar was initialized at the end of main.js file. We’re going to move this initialization code into the require callback.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>, <span class="string">'approuter'</span>, <span class="string">'bootstrap'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, Backbone, AppRouter</span>)</span>&#123;</span><br><span class="line">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">window</span>.app = <span class="keyword">new</span> AppRouter();</span><br><span class="line">        Backbone.history.start();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Since the diminished main.js file only contains the application router definition, I renamed it approuter.js.</p>
+<h3 id="Using_RequireJs_to_load_the_templates"><a href="#Using_RequireJs_to_load_the_templates" class="headerlink" title="Using RequireJs to load the templates"></a>Using RequireJs to load the templates</h3><p>The NodeCellar app was loading all templates asynchronously when the DOM was ready, which is a good thing. Let’s improve this by only loading templates when actually needed.<br>RequireJs has a text plugin that allows to specify a template as a text dependency.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">"underscore"</span>, <span class="string">"text!../tpl/WineView.html"</span>, <span class="string">"views/winedetails"</span>],</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">_, WineViewTpl, WineView</span>) </span>&#123;</span><br><span class="line">        WineView.prototype.template = _.template(WineViewTpl);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>Here’s the <a href="https://github.com/theasta/nodecellar-requirejs/commit/74351404c99075f12dbbfd0fdd6163ad41cb6460" target="_blank" rel="external">commit summary</a>.</p>
+<h3 id="Creating_one_file_by_section"><a href="#Creating_one_file_by_section" class="headerlink" title="Creating one file by section"></a>Creating one file by section</h3><p>My goal is to create one javascript file by section. Those sections are actually already defined in the Backbone router (approuter.js). All we have to do is to create one actual ‘physical’ file by section so we can run the RequireJs optimizer on each of them later.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> AppRouter = Backbone.Router.extend(&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    home: <span class="function"><span class="keyword">function</span>(<span class="params">id</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">require</span>([<span class="string">'routes/home'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    list: <span class="function"><span class="keyword">function</span>(<span class="params">page</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">require</span>([<span class="string">'routes/list'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then each section file will require what it needs.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">define([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'home'</span>, <span class="string">'text!homeview'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, HomeView, HomeViewTpl</span>)</span>&#123;</span><br><span class="line">    HomeView.prototype.template = _.template(HomeViewTpl);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Turn_js_files_into_modules"><a href="#Turn_js_files_into_modules" class="headerlink" title="Turn js files into modules"></a>Turn js files into modules</h3><p>So far, the original scripts were not modified. We do use RequireJs to load them but they are not modules yet. Code is still shared accross files through the global namespace.</p>
+<p>It’s time now to create well-scoped and self-contained modules. Here’s the steps I took for each file:</p>
+<ul>
+<li>wrap the content into a define method</li>
+<li>list all the dependencies, pass them as arguments in the callback function</li>
+<li>export an object or a function, depending on my needs.</li>
+</ul>
+<p>Here’s what the WineCollection will look like after this step :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define([<span class="string">'jquery'</span>, <span class="string">'underscore'</span>, <span class="string">'backbone'</span>, <span class="string">'WineModel'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$, _, Backbone, Wine</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Backbone.Collection.extend(&#123;</span><br><span class="line">        model: Wine,</span><br><span class="line">        url: <span class="string">"/wines"</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Notice we don’t even need to name it WineCollection anymore.</p>
+<p>To use this collection function, we only need to require it.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'path/to/winecollection.js'</span>, <span class="string">'path/to/another/module'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">WineCol, anothermodule</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myWineCollection = <span class="keyword">new</span> WineCol();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>Now if you type WineCollection in the console, you won’t have access to its definition anymore. The global namespace has been successfully uncluttered.</p>
+<p>Here’s the <a href="https://github.com/theasta/nodecellar-requirejs/commit/b338a8a2c76b39ab224cf942843d7a615d8a2e08" target="_blank" rel="external">commit summary</a>.</p>
+<h3 id="Cleaning_common-js"><a href="#Cleaning_common-js" class="headerlink" title="Cleaning common.js"></a>Cleaning common.js</h3><p>Now that all files are modules, list and load their own dependencies, I could remove from common.js:</p>
+<ul>
+<li>all unnecessary shim configuration</li>
+<li>all references to files that were not needed to bootstrap the application (e.g. the paginator, the templates..).</li>
+</ul>
+<p>However I kept references to files that were a shared resource shared like jquery, bootstrap, underscore, backbone. After all it was the purpose behind common.js.</p>
+<h3 id="Adding_a_build_script"><a href="#Adding_a_build_script" class="headerlink" title="Adding a build script"></a>Adding a build script</h3><p>It’s time to give a try to the optimization tool. First thing, we need to include <a href="https://github.com/jrburke/r.js" target="_blank" rel="external">r.js</a> and to create a <a href="https://github.com/theasta/nodecellar-requirejs/blob/master/build-tools/build.js" target="_blank" rel="external">build script</a>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(&#123;</span><br><span class="line">    appDir: <span class="string">"../public"</span>,</span><br><span class="line">    baseUrl: <span class="string">"js"</span>,</span><br><span class="line">    mainConfigFile: <span class="string">"../public/js/common.js"</span>,</span><br><span class="line">    dir: <span class="string">"../public-built"</span>,</span><br><span class="line">    modules: [</span><br><span class="line">        &#123;</span><br><span class="line">            name: <span class="string">"common"</span>,</span><br><span class="line">            include: <span class="string">"text"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/home"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/about"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/list"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            name:<span class="string">"routes/addview"</span>,</span><br><span class="line">            exclude:[<span class="string">"common"</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>The mainConfigFile is important. It allows the build script to use the requirejs configuration we already set up in common.js. We could also copy and paste the configuration into that build script but let’s stay DRY.</p>
+<p>To run the optimizer :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.js -o build.js</span><br></pre></td></tr></table></figure></p>
+<p>The optimization tool will create a copy of the public folder, named it as requested ‘public-built’ and optimize JavaScript assets (and also the css files but let’s keep that for later).</p>
+<h3 id="Modifying_the_server-js_file"><a href="#Modifying_the_server-js_file" class="headerlink" title="Modifying the server.js file"></a>Modifying the server.js file</h3><p>In order to test the optimized version, we need to modify the node script “server.js” so it serves static files from the public-built in a production environment.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(express.static(path.join(__dirname, (process.env.NODE_ENV === <span class="string">'production'</span>) ? <span class="string">'public-built'</span> : <span class="string">'public'</span>)));</span><br></pre></td></tr></table></figure>
+<p>Then run<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NODE_ENV=production node server.js</span><br></pre></td></tr></table></figure></p>
+<p>Now let’s have a look at the network panel.</p>
+<p><img src="/images/2013-02/nodecellar_network_final.gif" alt="Network Panel"></p>
+<p>Voilà !</p>
+<p><em>Nota Bene: The andika.js is an external JavaScript file (<a href="http://use.edgefonts.net/andika.js" target="_blank" rel="external">http://use.edgefonts.net/andika.js</a>) that allows us to use the Andika Web Font. It was not captured in the first panel screenshot though it was already there).</em></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><a href="http://nodecellar.coenraets.org/">Nodecellar</a> is a sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB. <a href="https://github.com/ccoenraets/nodecellar">The source code</a> was made available on Github by its author, Christophe Coenraets, so everyone can dig into it and learn how to use those brilliant libraries and tools.</p>
+<p>However, it felt like a key player was forgotten on the invite list : <a href="http://requirejs.org/">RequireJs</a>, the infamous javascript file loader. Since I was curious to know how difficult it could be to add RequireJs to an existing application and turn all its javascript code into modules, I decided to take a crack at it and to record the process by committing each step on my <a href="https://github.com/theasta/nodecellar-requirejs">nodecellar fork</a> on Github.</p>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[External Stylesheets and Web Performance]]></title>
+    <link href="http://www.theasta.net/blog/2012/06/24/external-stylesheets-and-web-performance/"/>
+    <id>http://www.theasta.net/blog/2012/06/24/external-stylesheets-and-web-performance/</id>
+    <published>2012-06-25T00:18:00.000Z</published>
+    <updated>2014-11-23T21:34:01.000Z</updated>
+    <content type="html"><![CDATA[<p>In my previous article, I listed the <a href="/blog/2012/06/23/three-key-moments-web-performance/">3 key moments and two major concepts I keep in mind when trying to improve web performance</a>.<br>Let’s see the impact of external stylesheets on each of them.</p>
+<a id="more"></a>
+<h2 id="Start_Render_Time__26amp_3B_26amp_3B_Progressive_Rendering"><a href="#Start_Render_Time__26amp_3B_26amp_3B_Progressive_Rendering" class="headerlink" title="Start Render Time &amp;&amp; Progressive Rendering"></a>Start Render Time &amp;&amp; Progressive Rendering</h2><p>External Stylesheets referenced in the head delay the start render time. Stylesheets have to be first fetched and parsed before the page starts rendering.</p>
+<p>An external stylesheet requested from the body won’t delay start render time and won’t block progressive rendering in most browsers but may end up exhibiting a FOUC (<strong>Flash of Unstyled Content</strong>) once the stylesheet is done downloading and parsed. Redraw may also occur.</p>
+<p><strong>IE browsers</strong> are the exception and <strong>block page rendering</strong> until all external stylesheets, referenced in the head or body, are downloaded. Page rendering it is and should not be confused with CSS rendering : the DOM elements are not showing at all and the user stares at a blank white screen for a few seconds until the content appear suddenly.</p>
+<p><em>To avoid both IE blank white screen and FOUC phenomenon, all stylesheets should be move to the document HEAD, even if it delays the start render time.</em></p>
+<h2 id="DOMContentLoaded_event"><a href="#DOMContentLoaded_event" class="headerlink" title="DOMContentLoaded event"></a>DOMContentLoaded event</h2><p>The DOMContentLoaded event is fired when the document is done parsing and synchronously loaded scripts are parsed and executed.</p>
+<p>It seems like external stylesheets shouldn’t interfere with the event being fired but as explained in this <a href="http://molily.de/weblog/domcontentloaded" target="_blank" rel="external">very interesting article by molily</a>, they do under certain circumstances.</p>
+<blockquote>
+<p>DOMContentLoaded event doesn’t wait for stylesheets to load provided that <strong>no scripts are placed after the stylesheet reference</strong> <link rel="stylesheet">.</p>
+</blockquote>
+<p>This happens because <strong>a script following a stylesheet won’t be executed until the stylesheet is done downloading</strong>, even if the script is downloaded meanwhile. Since the scripts have to be executed before the DOMContentLoaded event is fired, it delays the event.</p>
+<table>
+<thead>
+<tr>
+<th>Stylesheets block the execution of :</th>
+<th>Webkit</th>
+<th>Gecko</th>
+<th>IE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>subsequent external scripts</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>subsequent inline scripts</td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>previous scripts</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p><em>There is no really solution for this problem. The scripts should be at the bottom of the page, and stylesheets as lightweight as possible. When possible, scripts containing code only needed after page load should be loaded asynchronously.</em></p>
+<h2 id="Parallel_Downloads"><a href="#Parallel_Downloads" class="headerlink" title="Parallel Downloads"></a>Parallel Downloads</h2><p>Stylesheets don’t block parallel downloads of other components, except in those browsers :</p>
+<ul>
+<li><p>in Chrome if a stylesheet is followed by a script, other components are not downloaded until the stylesheet is fetched</p>
+</li>
+<li><p>in IE7 &amp; IE8 if there is :</p>
+<ul>
+<li>an inline script later in the DOM</li>
+<li>IE conditional comments</li>
+</ul>
+</li>
+</ul>
+<p>Stoyan Stefanov explains in <a href="http://www.phpied.com/conditional-comments-block-downloads/" target="_blank" rel="external">this article</a> how to fix the issue with conditional comments. Just add an empty cc just before the stylesheet reference.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!--[if IE]&#62;&#60;![endif]--&#62;&#10;&#60;link rel=&#34;stylesheet&#34; href=&#34;css/style.css&#34; type=&#34;text/css&#34; media=&#34;screen&#34;&#62;&#10;&#60;!--[if IE 7]&#62;&#10;&#60;link rel=&#34;stylesheet&#34; href=&#34;css/ie7.css&#34; type=&#34;text/css&#34; media=&#34;screen&#34;&#62;&#10;&#60;![endif]--&#62;</span><br></pre></td></tr></table></figure>
+<h2 id="Document_Complete"><a href="#Document_Complete" class="headerlink" title="Document Complete"></a>Document Complete</h2><p>External Stylesheets have no direct impact on Document Complete Time. But the onload event will be likely to be subsequently delayed by the previous factors.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>In my previous article, I listed the <a href="/blog/2012/06/23/three-key-moments-web-performance/">3 key moments and two major concepts I keep in mind when trying to improve web performance</a>.<br>Let’s see the impact of external stylesheets on each of them.</p>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Three Key Moments to keep in mind when dealing with page load performance]]></title>
+    <link href="http://www.theasta.net/blog/2012/06/23/three-key-moments-web-performance/"/>
+    <id>http://www.theasta.net/blog/2012/06/23/three-key-moments-web-performance/</id>
+    <published>2012-06-24T01:36:00.000Z</published>
+    <updated>2016-01-13T06:23:55.000Z</updated>
+    <content type="html"><![CDATA[<p>Web performance is not about how fast a web page loads but about how fast it gives the impression to the user to load and how long it takes for the page to actually be ready for interaction.<br>It’s a mix of perceptiveness and pure metrics.</p>
+<p>Here’s the three key moments and two crucial concepts I keep in mind when trying to improve load performance.</p>
+<a id="more"></a>
+<h2 id="Key_Moments"><a href="#Key_Moments" class="headerlink" title="Key Moments"></a>Key Moments</h2><h3 id="Start_Render_Time"><a href="#Start_Render_Time" class="headerlink" title="Start Render Time"></a>Start Render Time</h3><p>The start render time is the moment the <strong>page stops being blank</strong> and the user can actually see something in her browser: some text, a background-color …</p>
+<p><em>The start render time is displayed in WebPageTest as a vertical colored bar (the first one). Firebug &amp; Chrome Developer Tools don’t display it.</em></p>
+<h3 id="DOMContentLoaded_event"><a href="#DOMContentLoaded_event" class="headerlink" title="DOMContentLoaded event"></a>DOMContentLoaded event</h3><p>The DOMContentLoaded event is fired when the document is done parsing and synchronous scripts are loaded, parsed and executed.</p>
+<p>This event is better known to developers as the <strong>jquery $.ready function</strong>.<br>It is supported by Chrome, Firefox, IE9+ and has been added to the HTML5 Specification. For older versions of IE, it’s possible to fallback to use the onreadystatechange event.</p>
+<p>This event is highly important since it is used to bind other events and run initialization code. One can consider that at this moment, the page’s dom elements are ready for interaction.</p>
+<!--The DOMContentLoaded event can happen before or after the start render time.-->
+<p><em>Firebug &amp; Chrome Developer Tools both display this event as a vertical colored bar (the first one). WebPageTest displays it as a pink column when accurate.</em></p>
+<h3 id="Document_Complete_/_onload_event"><a href="#Document_Complete_/_onload_event" class="headerlink" title="Document Complete / onload event"></a>Document Complete / onload event</h3><p>By the time the DOMContentLoaded event is fired, the page’s DOM is parsed and ready. Referenced elements like images or iframes may not be done loading though. Once they are retrieved, the browser considers the page fully loaded. The ‘onload’ event is fired.</p>
+<p>Document Complete is actually the point in time when <strong>all the content referenced in the HTML is fully-loaded</strong>.</p>
+<p><em>This event can be seen in Firebug or Chrome Developer Tools’ timeline…</em></p>
+<p><img src="/images/2012-06/chrome-waterfall.gif" alt="&quot;Chrome Developer Tools Waterfall&quot;"></p>
+<p><em>or in WebPageTest :</em></p>
+<p><img src="/images/2012-06/webpagetest-waterfall.gif" alt="&quot;WebPageTest Waterfall&quot;"></p>
+<h2 id="Two_important_notions"><a href="#Two_important_notions" class="headerlink" title="Two important notions"></a>Two important notions</h2><h3 id="Progressive_Rendering"><a href="#Progressive_Rendering" class="headerlink" title="Progressive Rendering"></a>Progressive Rendering</h3><p>Between the Start Render Time and the Document Complete Time (and even beyond since there is no such thing as a stop render time), the web page is rendered progressively. Elements appear as soon as they are downloaded and available.<br>It works as a progress indicator and can influence on how fast the user feels the page is loading.</p>
+<p><em>Webpagetest.org allows you to generate a video that allows to see how the webpage renders.</em></p>
+<h3 id="Parallel_downloads"><a href="#Parallel_downloads" class="headerlink" title="Parallel downloads"></a>Parallel downloads</h3><p>It is the ability to download multiple components simultaneously from the same hostname.<br>It has a big impact on both Progressive Rendering and Document Complete time.</p>
+<p>The number of components that can be loaded simultaneously depends on the web browser. For example, IE6 &amp; IE7 limit parallel downloads to 2 per hostname, IE8 to 6.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Web performance is not about how fast a web page loads but about how fast it gives the impression to the user to load and how long it takes for the page to actually be ready for interaction.<br>It’s a mix of perceptiveness and pure metrics.</p>
+<p>Here’s the three key moments and two crucial concepts I keep in mind when trying to improve load performance.</p>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[new Date('2012/01/01') vs new Date('2012-01-01')]]></title>
+    <link href="http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/"/>
+    <id>http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/</id>
+    <published>2012-02-13T04:13:00.000Z</published>
+    <updated>2014-11-23T21:34:01.000Z</updated>
+    <content type="html"><![CDATA[<p>When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.</p>
+<a id="more"></a>
+<p>For example, since I’m living in Vancouver, </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'January 1, 2012'</span>)</span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012/01/01'</span>)</span><br></pre></td></tr></table></figure>
+<p>returns in Chrome</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;Tue Jan 01 2012 00:00:00 GMT-0800 (PST)&#34;.</span><br></pre></td></tr></table></figure>
+<p>If I was in Paris, it would return</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34;Tue Jan 01 2012 00:00:00 GMT+0100&#34;</span><br></pre></td></tr></table></figure>
+<p>etc..</p>
+<p>So far so good ! Until I discovered today that a very minor change in my dateString format could make the Date constructor behave unpredictably. Indeed :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>)</span><br></pre></td></tr></table></figure>
+<p>returns in Chrome</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mon Dec 31 2011 16:00:00 GMT-0800 (PST)</span><br></pre></td></tr></table></figure>
+<p>Which is actually Tue Jan 01 2012 00:00:00 <strong>but GMT</strong>.<br>My date string was interpreted in <strong>universal time instead of local time</strong>.</p>
+<p>It’s all but trivial since:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>).getFullYear() <span class="comment">//will return 2011 if you're behind GMT !!</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="ISO_8601_format"><a href="#ISO_8601_format" class="headerlink" title="ISO 8601 format"></a>ISO 8601 format</h3><p>The thing is “2012-01-01” is a ISO 8601 format, which support started with javascript 1.8.5.<br>As “2012/01/01” is a shorthand for “2012/01/01 00:00:00”, “2012-01-01” stands for “2012-01-01T00:00:00”.<br>Unfortunately, “2012-01-01T00:00:00” implies <strong>GMT timezone</strong>. If I want to get Jan 1, 2012 in Vancouver time, I have to use “2012-01-01T00:00:00-0800”.</p>
+<p>Though it is tempting to use the mysql-like YYYY-MM-DD formatting, it’s probably better to simply avoid it since it’s not supported by old browsers (I tried on IE8 and IE7, it failed !), and tricky when it comes to new ones.</p>
+<h3 id="Quick_reminder"><a href="#Quick_reminder" class="headerlink" title="Quick reminder"></a>Quick reminder</h3><p>Here is a quick reminder of the different results I got (you may have other results depending on where you live) :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** UTC DATE Reference **/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="built_in">Date</span>.UTC(<span class="number">2012</span>,<span class="number">0</span>,<span class="number">1</span>));</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01T00:00:00+0000'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//=&gt; Mon Dec 31 2011 16:00:00 GMT-0800 (PST)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** LOCAL DATE */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2012</span>,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'January 1, 2012'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012/01/01'</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2012-01-01T00:00:00-0800'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//=&gt; Tue Jan 01 2012 00:00:00 GMT-0800 (PST)</span></span><br></pre></td></tr></table></figure>
+<p><em>Please note:</em><br>What is true for Date constructor is also true for <strong>Date.parse</strong> static method.</p>
+<p><em>Please note 2:</em><br>Chrome interprets in local time the following code :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">"2012-01-01 00:00:00"</span>);</span><br></pre></td></tr></table></figure>
+<p>So the simple fact to add a time makes you jump from GMT to local time.</p>
+<p>Firefox doesn’t understand this format and it’s probably for the best.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>When creating a JavaScript date object using a dateString parameter, I expect it to be interpreted in my local time.</p>]]>
+    
+    </summary>
+    
+  </entry>
+  
+</feed>

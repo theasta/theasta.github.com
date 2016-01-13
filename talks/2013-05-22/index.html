@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Versioning Assets</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+                    <section>
+					<h1>Versioning Static Assets With Grunt</h1>
+                    </section>
+                    <section>
+                        <h2>Who am I ?</h2>
+                        <h3>Alexandrine Boissière</h3>
+                        <p>Senior Software Engineer at HootSuite</p>
+
+                        <p>
+                            <small>Twitter : <a href="http://twitter.com/theasta" target="_blank" rel="external">@theasta</a></small>
+                        </p>
+                    </section>
+				</section>
+
+                <section>
+                    <h2>Static assets ?</h2>
+                    <img src="/images/2013-05-22/icons_file_type.jpg">
+                </section>
+
+
+                    <section>
+                        <h2>Why do we need to version static assets&nbsp;?</h2>
+                        <p class="fragment"><img src="/images/2013-05-22/high-performance-web-sites.jpg"></p>
+                    </section>
+
+                    <section>
+                        <h2>Rule #1: Make fewer http requests</h2>
+                    </section>
+
+                    <section>
+                        <h2>Rule #3: Add an expires header</h2>
+                    </section>
+
+                    <!--<section>-->
+                        <!--<h3>Visitor with an empty cache</h3>-->
+                        <!--<h4>Request Headers</h4>-->
+                        <!--<pre><code>-->
+<!--GET /js/base.js HTTP/1.1-->
+<!--Host: static.hootsuite.com-->
+                        <!--</code></pre>-->
+                        <!--<h4>Response Headers</h4>-->
+                        <!--<pre><code>-->
+<!--HTTP/1.1 200 OK-->
+<!--Last-Modified: Mon, 29 Apr 2013 20:55:51 GMT-->
+<!--Content-Length: 125374-->
+
+<!--var hs = ...-->
+                        <!--</code></pre>-->
+
+                    <!--</section>-->
+
+                    <!--<section>-->
+                        <!--<h3>Returning Visitor with a primed cache</h3>-->
+                        <!--<h4>Conditional GET Request</h4>-->
+                        <!--<pre><code>-->
+<!--GET /js/base.js HTTP/1.1-->
+<!--Host: static.hootsuite.com-->
+<!--If-Modified-Since: Mon, 29 Apr 2013 20:55:51 GMT-->
+                        <!--</code></pre>-->
+
+                        <!--<h4>The server only returns a status code</h4>-->
+                        <!--<pre><code>-->
+<!--HTTP/1.1 304 Not Modified-->
+                        <!--</code></pre>-->
+                    <!--</section>-->
+
+                    <section>
+                        <h3>HTTP Validation Model</h3>
+                        <p><strong>HTTP Headers</strong></p>
+                        <ul>
+                            <li><code>Last-Modified / If-Modified-Since</code></li>
+                            <li><code>Etag / If-None-Match</code></li>
+                        </ul>
+                            <img src="/images/2013-05-22/http_validation_model.png">
+                    </section>
+                    <!--<section>-->
+                        <!--<h3>HTTP Validation Model</h3>-->
+                        <!--<ul>-->
+                            <!--<li>Conditional GET Request</li>-->
+                            <!--<ul>-->
+                                <!--<li><code>Last-Modified / If-Modified-Since</code></li>-->
+                                <!--<li>Etags : <code>Etag / If-None-Match</code></li>-->
+                            <!--</ul>-->
+                            <!--<li><span style="color:green;">Fast, light-weight response</span></li>-->
+                            <!--<li><span style="color:orange;">Roundtrip to the server !!</span></li>-->
+                        <!--</ul>-->
+                    <!--</section>-->
+
+                    <section>
+                        <h3>HTTP Expiration Model</h3>
+                        <p><strong>HTTP Headers</strong></p>
+                        <ul>
+                            <li><code>Cache-Control: max-age=2592000</code></li>
+                            <li><code>Expires:Sat, 22 Jun 2013 05:00:00 GMT</code></li>
+                        </ul>
+                        <p style="color:green;padding-top:20px;">No request to the server for the next month !!</p>
+                    </section>
+
+                    <section>
+                        <h3>When I say no request, I mean it !</h3>
+                        <img src="/images/2013-05-22/maurice_day_1.jpg">
+                        <img class="fragment" src="/images/2013-05-22/maurice_day_18.jpg">
+                    </section>
+
+				<section>
+                    <h2>Cache-Busting Techniques</h2>
+                    <ul>
+                        <li><code>/js/base.js<span style="color:red;">?v=1.2.0</span></code> (BAD)</li>
+                        <li><code><span style="color:red;">/1.2.0</span>/js/base.js</code></li>
+                        <li><code>/js/base<span style="color:red;">.1.2.0</span>.js</code></li>
+                    </ul>
+				</section>
+
+                    <section>
+                        <h2>Old HootSuite</h2>
+                        <p><code><span style="color:red;">/12345</span>/js/base.js</code></p>
+                        <p><code><span style="color:red;">/12345</span>/css/homepage.css</code></p>
+                        <p><code><span style="color:red;">/12345</span>/images/bg.png</code></p>
+                        <p><span style="color:red;">12345</span> folder = <strong>release tag</strong></p>
+                    </section>
+
+                    <section>
+                        <h2>Versioning By Release Number</h2>
+                        <p style="margin-top:1em;color: red;">Continuous deployment + per-release assets versioning = bad match !!</p>
+                        <img src="/images/2013-05-22/no_changes.gif">
+                        <aside class="notes">
+                        <p>Everytime we release :</p>
+                        <ul>
+                            <li>Upload all static assets (even if nothing changed)</li>
+                            <li>Process all JavaScript &amp; CSS files (even if they didn't change)</li>
+                            <li>Users have to re-download static assets</li>
+                        </ul>
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Version Static Assets on a per-file basis</h2>
+                        <img src="/images/2013-05-22/per-file.png">
+                    </section>
+
+                <section>
+                    <h2>Problems to solve</h2>
+                    <ul>
+                        <li><strong>Deployment:</strong>
+                        <ul>
+                            <li>Automate renaming of assets files</li>
+                            <li>Process and upload only when necessary</li>
+                        </ul>
+                        </li>
+                        <li><strong>Codebase:</strong>
+                        <ul>
+                            <li>Retrieve the versioned filenames</li>
+                        </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section data-state="alert">
+                    <h2>SPOILER !!!</h2>
+                    <h4>Deployment Time for static assets:</h4>
+                    <h2 class="fragment">Old HootSuite: 11 min</h2>
+                    <h2 class="fragment">New HootSuite: 1 min</h2>
+                </section>
+
+                <section>
+                    <h2>Deployment</h2>
+                    <h3>Grunt</h3>
+                    <img src="/images/2013-05-22/grunt.png">
+                    <p>A JavaScript task runner built on top of Node.js</p>
+                    <aside class="notes">
+                    <ul>
+                        <li>JavaScript Minification Plugins: Uglify, YUI Compressor, Google Closure</li>
+                        <li>CSS Minification Plugins: cssmin, YUI Compressor</li>
+                        <li>...</li>
+                    </ul>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Gruntfile.js</h2>
+<pre><code data-trim="" contenteditable="">
+module.exports = function(grunt) {
+  grunt.initConfig({
+    uglify: { ... },
+    cssmin: { ... },
+    s3: { ... }
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-s3');
+  grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
+};
+</code></pre>
+<code>grunt &lt;taskName&gt;</code>
+                </section>
+
+                <section>
+                    <h2>Task Configuration - Files</h2>
+                    <img src="/images/2013-05-22/grunt_files.gif">
+                </section>
+                <section>
+                    <h2>Step 1: Write a deployment script - js</h2>
+<pre><code data-trim="" contenteditable="">
+grunt.initConfig({
+  uglify: {
+    home: {
+      files: {
+        'build/js/home.js': ['js/home.js', 'js/home_utils.js']
+      }
+    },
+    contact: {
+      files: {
+        'build/js/contact.js': ['js/contact_form.js']
+      }
+    }
+  }
+});
+</code></pre>
+<code>grunt uglify</code>
+<br>
+<code>grunt uglify:home</code>
+                </section>
+
+                <section>
+                    <h2>Step 1: Write a deployment script - css</h2>
+<pre><code data-trim="" contenteditable="">
+grunt.initConfig({
+  cssmin: {
+    main: {
+      files: {
+        'build/css/main.css': ['css/layout.css', 'css/buttons.css']
+      }
+    }
+  }
+});
+</code></pre>
+<code>grunt cssmin</code>
+                </section>
+
+                <section>
+                    <h2>Register a deployment task</h2>
+<pre><code data-trim="" contenteditable="">
+grunt.registerTask('deploy', ['uglify', 'cssmin', 's3']);
+</code></pre>
+<code>grunt deploy</code>
+                </section>
+
+                <section data-state="alert">
+                    <h2>SPOILER !!!</h2>
+                    <h2>Old HootSuite: 11 min</h2>
+                    <h2 class="fragment">Now: 4 min</h2>
+                </section>
+
+                <section>
+                    <h2>Step 2 : Version files</h2>
+                    <h4>The renaming logic is very simple</h4>
+                    <ul>
+                        <li>Revving with a date
+                        <ul>
+                            <li>Use the last modification time</li>
+                        </ul>
+                        </li>
+                        <li>Revving with a md5 hash
+                        <ul>
+                            <li>Hash the file content</li>
+                        </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Declarative Syntax !!</h2>
+                    <img src="/images/2013-05-22/grunt_files_question_mark.gif">
+                    <aside class="notes">
+                    <ul>
+                        <li>The GruntFile uses a declarative syntax to define source-destination file mapping</li>
+                        <li>Impossible to know by advance what's the name of the destination file is going to be once versioned</li>
+                    </ul>
+                    </aside>
+                </section>
+
+                <!--<section>-->
+                    <!--<h2>Solution</h2>-->
+<!--<pre><code data-trim contenteditable>-->
+<!--grunt.config.set('uglify.home.files.dest',-->
+                 <!--'build/js/home.20130413004500.css');-->
+<!--</code></pre>-->
+                <!--</section>-->
+
+                <section>
+                    <h2>Solution: An assets-versioning plugin</h2>
+                    <img src="/images/2013-05-22/grunt_plugin.gif">
+                    <aside class="notes">
+                    <ul>
+                        <li>refer to a previously registered task <i>(uglify:home, cssmin:main, ...)</i></li>
+                        <li>extract the files mapping from that task configuration</li>
+                        <li>run the renaming logic and deduce the new destination filename</li>
+                        <li>clone the original task and update its configuration with the new dest file</li>
+                        <li>run the surrogate task</li>
+                    </ul>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Example</h2>
+<pre><code data-trim="" contenteditable="">
+assets_versioning: {
+    home: {
+      options: {
+        multitask: 'uglify'
+      }
+    }
+  }
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>options.skipExisting</h2>
+                    <p>Won't run the cloned task if ever the versioned destination file already exists.</p>
+                    <p><small>and plenty other options...</small></p>
+                    <!--<ul>-->
+                        <!--<li><strong>options.skipExisting</strong>: Won't run the alternate task if ever the destination filename already exists in the destination folder.</li>-->
+                        <!--<li><strong>options.use</strong>: date or hash.</li>-->
+                        <!--<li><strong>options.dateFormat</strong>Default value: `YYYYMMDDHHmmss'</li>-->
+                    <!--</ul>-->
+                </section>
+
+
+                    <section>
+                        <h2>Codebase</h2>
+                        <h3>How to retrieve the versioned filename ?</h3>
+                        <p><code>/images/loader.gif</code> -&gt; <code>/images/loader.20130413004500.gif</code></p>
+
+<p>options.output: generates a json file with both original and versioned filenames.</p>
+                        <!--<p>Can be easily used by any dynamic language.. </p>-->
+                    </section>
+
+                    <section>
+                        <h2>But .. css ?</h2>
+                        <h4>Solution : Use a css preprocessor (less, sass)</h4>
+
+<pre><code data-trim="" contenteditable="">
+// images.less
+@loader_gif: 'loader.gif';
+@buttons_btn-cta_png: 'buttons/btn-cta.png';
+</code></pre>
+
+<pre><code data-trim="" contenteditable="">
+.btn-cta {
+    color: #384602;
+    background: #accd3d url("@{base-image}@{buttons_btn-cta_png}") 0 center repeat-x;
+}</code></pre>
+                    </section>
+
+                <section>
+                    <h2>Where to get that plugin ?</h2>
+                    <p>NPM</p>
+                    <code>npm install grunt-assets-versioning</code>
+
+                    <p>Github</p>
+                    <a href="https://github.com/theasta/grunt-assets-versioning" target="_blank">https://github.com/theasta/grunt-assets-versioning</a>
+                </section>
+
+				<section>
+					<h1>THE END</h1>
+                    <h2>By Alexandrine Boissière - @theasta</h2>
+                    <h3>alexandrine.boissiere@hootsuite.com</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
