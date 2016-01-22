@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Techniques of The Professional PixPocket]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.theasta.net/"/>
-  <updated>2014-11-23T21:34:01.000Z</updated>
+  <updated>2016-01-22T15:48:51.000Z</updated>
   <id>http://www.theasta.net/</id>
   
   <author>
@@ -13,6 +13,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[There Is A Life Outside The IDE For Your JSDoc Comments]]></title>
+    <link href="http://www.theasta.net/blog/2016/01/22/jsdoc-docset-dash/"/>
+    <id>http://www.theasta.net/blog/2016/01/22/jsdoc-docset-dash/</id>
+    <published>2016-01-22T15:48:27.000Z</published>
+    <updated>2016-01-22T15:48:51.000Z</updated>
+    <content type="html"><![CDATA[<p>Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called <a href="https://kapeli.com/dash" target="_blank" rel="external">Dash</a>. Used in conjunction with <a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>, it lets you access and search docs in a heartbeat, even if you’re offline.<br>Wouldn’t that be <strong>great if you could also use it with your own projects</strong>? You actually can!<br><a id="more"></a></p>
+<p><img src="/images/2016/jsdoc-docset-alfred.jpeg" alt="Searching Dash for &quot;FileL&quot; through Alfred"></p>
+<p>Here’s how to automatically generate a dash-compatible docset from your own code and JSDoc comments.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install jsdoc -g</span><br><span class="line">npm install jsdoc-dash-template --save-dev</span><br><span class="line">jsdoc <span class="operator">-d</span> path/to/output/folder -p -t node_modules/jsdoc-dash-template -r path/to/src/folder</span><br></pre></td></tr></table></figure>
+<p>Double-click on the docset to open it in Dash. Linux or Windows users may also take a shot at <a href="https://zealdocs.org/" target="_blank" rel="external">Zeal</a> or <a href="https://velocity.silverlakesoftware.com/" target="_blank" rel="external">Velocity</a>.</p>
+<p><img src="/images/2016/jsdoc-docset-dash.jpeg" alt="Searching Dash for &quot;ReactReconciler&quot;"></p>
+<p>If you’re just curious about the final result, you can download the <a href="https://www.dropbox.com/s/aqhw0a69dyccmh5/reactDev.docset.zip?dl=0" target="_blank" rel="external">docset I created by running the tool directly on React source code</a>. The generated documentation won’t look like the public API you can find on the official website since it also exposes the private methods. Very handy if you want to dive into React internals.</p>
+<p>The original project, <a href="https://github.com/theasta/jsdoc-dash-template" target="_blank" rel="external">jsdoc-dash-template</a>, is hosted on Github. The README file provides further documentation on how to fine-tune your docset by adding a custom icon or title. Feel free to log any issues you may encounter directly there.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called <a href="https://kapeli.com/dash">Dash</a>. Used in conjunction with <a href="https://www.alfredapp.com/">Alfred</a>, it lets you access and search docs in a heartbeat, even if you’re offline.<br>Wouldn’t that be <strong>great if you could also use it with your own projects</strong>? You actually can!<br>]]>
+    
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Versioning JavaScript and CSS files while improving page load time and reducing bandwidth cost]]></title>

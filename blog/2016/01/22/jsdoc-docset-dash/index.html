@@ -5,18 +5,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Theasta</title>
+  <title>There Is A Life Outside The IDE For Your JSDoc Comments | Theasta</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="DependenciesThemes are written using Sass to keep things modular and reduce the need for repeated selectors across files. Make sure that you have the reveal.js development environment including the Gr">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Theasta">
-<meta property="og:url" content="http://www.theasta.net/talks/2013-05-25/css/theme/README.html">
+  <meta name="description" content="Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called Dash. Used in conjunction with Alfred, it lets you access">
+<meta property="og:type" content="article">
+<meta property="og:title" content="There Is A Life Outside The IDE For Your JSDoc Comments">
+<meta property="og:url" content="http://www.theasta.net/blog/2016/01/22/jsdoc-docset-dash/index.html">
 <meta property="og:site_name" content="Theasta">
-<meta property="og:description" content="DependenciesThemes are written using Sass to keep things modular and reduce the need for repeated selectors across files. Make sure that you have the reveal.js development environment including the Gr">
-<meta property="og:updated_time" content="2014-11-23T21:34:01.000Z">
+<meta property="og:description" content="Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called Dash. Used in conjunction with Alfred, it lets you access">
+<meta property="og:image" content="http://www.theasta.net/images/2016/jsdoc-docset-alfred.jpeg">
+<meta property="og:image" content="http://www.theasta.net/images/2016/jsdoc-docset-dash.jpeg">
+<meta property="og:updated_time" content="2016-01-22T15:48:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Theasta">
-<meta name="twitter:description" content="DependenciesThemes are written using Sass to keep things modular and reduce the need for repeated selectors across files. Make sure that you have the reveal.js development environment including the Gr">
+<meta name="twitter:title" content="There Is A Life Outside The IDE For Your JSDoc Comments">
+<meta name="twitter:description" content="Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called Dash. Used in conjunction with Alfred, it lets you access">
   
   <link rel="alternative" href="/atom.xml" title="Theasta" type="application/atom+xml">
   
@@ -75,30 +77,25 @@
       <header>
     <h1 class="entry-title">
       
-        
+        There Is A Life Outside The IDE For Your JSDoc Comments
       
     </h1>
     <p class="meta">
-      <time datetime="2016-01-13T06:19:58.000Z">Jan 12 2016</time>
+      <time datetime="2016-01-22T15:48:27.000Z">Jan 22 2016</time>
 
     </p>
   </header>
 
   <div class="entry-content">
     
-      <h2 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h2><p>Themes are written using Sass to keep things modular and reduce the need for repeated selectors across files. Make sure that you have the reveal.js development environment including the Grunt dependencies installed before proceding: <a href="https://github.com/hakimel/reveal.js#development-environment" target="_blank" rel="external">https://github.com/hakimel/reveal.js#development-environment</a></p>
-<h2 id="Creating_a_Theme"><a href="#Creating_a_Theme" class="headerlink" title="Creating a Theme"></a>Creating a Theme</h2><p>To create your own theme, start by duplicating any <code>.scss</code> file in <a href="https://github.com/hakimel/reveal.js/blob/master/css/theme/source" target="_blank" rel="external">/css/theme/source</a> and adding it to the compilation list in the <a href="https://github.com/hakimel/reveal.js/blob/master/Gruntfile.js" target="_blank" rel="external">Gruntfile</a>.</p>
-<p>Each theme file does four things in the following order:</p>
-<ol>
-<li><p><strong>Include <a href="https://github.com/hakimel/reveal.js/blob/master/css/theme/template/mixins.scss" target="_blank" rel="external">/css/theme/template/mixins.scss</a></strong><br>Shared utility functions.</p>
-</li>
-<li><p><strong>Include <a href="https://github.com/hakimel/reveal.js/blob/master/css/theme/template/settings.scss" target="_blank" rel="external">/css/theme/template/settings.scss</a></strong><br>Declares a set of custom variables that the template file (step 4) expects. Can be overridden in step 3.</p>
-</li>
-<li><p><strong>Override</strong><br>This is where you override the default theme. Either by specifying variables (see <a href="https://github.com/hakimel/reveal.js/blob/master/css/theme/template/settings.scss" target="_blank" rel="external">settings.scss</a> for reference) or by adding full selectors with hardcoded styles.</p>
-</li>
-<li><p><strong>Include <a href="https://github.com/hakimel/reveal.js/blob/master/css/theme/template/theme.scss" target="_blank" rel="external">/css/theme/template/theme.scss</a></strong><br>The template theme file which will generate final CSS output based on the currently defined variables.</p>
-</li>
-</ol>
+      <p>Applications that I really use on a daily basis can be counted on the fingers of one hand, one of them is an API Documentation Browser called <a href="https://kapeli.com/dash" target="_blank" rel="external">Dash</a>. Used in conjunction with <a href="https://www.alfredapp.com/" target="_blank" rel="external">Alfred</a>, it lets you access and search docs in a heartbeat, even if you’re offline.<br>Wouldn’t that be <strong>great if you could also use it with your own projects</strong>? You actually can!<br><a id="more"></a></p>
+<p><img src="/images/2016/jsdoc-docset-alfred.jpeg" alt="Searching Dash for &quot;FileL&quot; through Alfred"></p>
+<p>Here’s how to automatically generate a dash-compatible docset from your own code and JSDoc comments.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install jsdoc -g</span><br><span class="line">npm install jsdoc-dash-template --save-dev</span><br><span class="line">jsdoc <span class="operator">-d</span> path/to/output/folder -p -t node_modules/jsdoc-dash-template -r path/to/src/folder</span><br></pre></td></tr></table></figure>
+<p>Double-click on the docset to open it in Dash. Linux or Windows users may also take a shot at <a href="https://zealdocs.org/" target="_blank" rel="external">Zeal</a> or <a href="https://velocity.silverlakesoftware.com/" target="_blank" rel="external">Velocity</a>.</p>
+<p><img src="/images/2016/jsdoc-docset-dash.jpeg" alt="Searching Dash for &quot;ReactReconciler&quot;"></p>
+<p>If you’re just curious about the final result, you can download the <a href="https://www.dropbox.com/s/aqhw0a69dyccmh5/reactDev.docset.zip?dl=0" target="_blank" rel="external">docset I created by running the tool directly on React source code</a>. The generated documentation won’t look like the public API you can find on the official website since it also exposes the private methods. Very handy if you want to dive into React internals.</p>
+<p>The original project, <a href="https://github.com/theasta/jsdoc-dash-template" target="_blank" rel="external">jsdoc-dash-template</a>, is hosted on Github. The README file provides further documentation on how to fine-tune your docset by adding a custom icon or title. Feel free to log any issues you may encounter directly there.</p>
 
     
   </div>
@@ -156,7 +153,7 @@
 <script>
   var disqus_shortname = 'theastaoctopress';
   
-  var disqus_url = 'http://www.theasta.net/talks/2013-05-25/css/theme/README.html';
+  var disqus_url = 'http://www.theasta.net/blog/2016/01/22/jsdoc-docset-dash/';
   
   (function(){
     var dsq = document.createElement('script');

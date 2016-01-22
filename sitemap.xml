@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.theasta.net/blog/2016/01/22/jsdoc-docset-dash/</loc>
+    <lastmod>2016-01-22T15:48:51.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.theasta.net/talks/2013-10-07/index.html</loc>
     <lastmod>2016-01-13T06:56:12.000Z</lastmod>
   </url>
@@ -162,7 +167,7 @@
   </url>
   
   <url>
-    <loc>http://www.theasta.net/blog/2012/06/24/external-stylesheets-and-web-performance/</loc>
+    <loc>http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/</loc>
     <lastmod>2014-11-23T21:34:01.000Z</lastmod>
   </url>
   
@@ -302,7 +307,7 @@
   </url>
   
   <url>
-    <loc>http://www.theasta.net/blog/2014/11/04/Versioning-JavaScript-and-CSS-files-while-improving-page-load-time/</loc>
+    <loc>http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/</loc>
     <lastmod>2014-11-23T21:34:01.000Z</lastmod>
   </url>
   
@@ -352,7 +357,7 @@
   </url>
   
   <url>
-    <loc>http://www.theasta.net/blog/2012/02/12/javascript-date-string-format/</loc>
+    <loc>http://www.theasta.net/blog/2012/06/24/external-stylesheets-and-web-performance/</loc>
     <lastmod>2014-11-23T21:34:01.000Z</lastmod>
   </url>
   
